@@ -136,7 +136,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
     <div class="auth-container">
-        <h2><i class="fas fa-sign-in-alt"></i> User Login</h2>
+        <h2><i class="fas fa-sign-in-alt"></i> Users Login</h2>
         <?php if (!empty($error)): ?>
             <div class="error-message"><?php echo $error; ?></div>
         <?php endif; ?>
