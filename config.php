@@ -3,8 +3,7 @@
 define('DB_HOST', 'sql306.infinityfree.com');
 define('DB_USER', 'if0_39620755');
 define('DB_PASS', 'Jermaine2000tz');
-define('DB_NAME', 'if0_39620755_ailse247
-');
+define('DB_NAME', 'if0_39620755_ailse247');
 define('DB_PORT', '3306'); // Assuming the port is 5432, adjust if necessary
 
 // Create database connection
