@@ -115,6 +115,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </style>
     </head>
     <body>
-        
+        <div class="auth-container">
+            <h2><i class="fas fa-user-plus"></i> User Registration</h2>
+            <form action="" method="POST">
+                <div class="input-icon">
+                    <i class="fas fa-user"></i>
+                    <input type="text" name="first_name" placeholder="First Name" required>
+                </div>
+                <div class="input-icon">
+                    <i class="fas fa-user"></i>
+                    <input type="text" name="last_name" placeholder="Last Name" required>
+                </div>
+                <div class="input-icon">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" name="email" placeholder="Email" required>
+                </div>
+                <div class="input-icon">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" name="password" placeholder="Password" required>
+                </div>
+                <div class="input-icon">
+                    <i class="fas fa-phone"></i>
+                    <input type="text" name="phone_number" placeholder="Phone Number" required>
+                </div>
+                <div class="input-icon">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <input type="text" name="default_delivery_address" placeholder="Delivery Address" required>
+                </div>
+                <button type="submit"><i class="fas fa-user-plus"></i> Register</button>
+            </form>
+            <p>Already have an account? <a href="user_login.php">Login here</a></p>
+            <p>Do you want to register as store owner? <a href="store_register.php">Register here</a></p>
+        </div>
     </body>
  </html>
