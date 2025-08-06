@@ -7,15 +7,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get and sanitize form data
     $firstname = trim($_POST['first_name']);
     $lastname = trim($_POST['last_name']);
-    $gender = trim($_POST['gender']); // gender
     $email = trim($_POST['email']);
     $password = $_POST['password'];
     $phoneNumber = trim($_POST['phone_number']);
     $deliveryAddress = trim($_POST['default_delivery_address']);
 
+    // Check if email already exists
+    $checkStmt = $conn->prepare("SELECT email FROM Users WHERE email = ?");
+    $checkStmt->bind_param("s", $email);
+    $checkStmt->execute();
+    $checkStmt->store_result();
+
+    if ($checkStmt->num_rows > 0) {
+        echo "<script>alert('Email already exists. Please use a different email.');</script>";
+        $checkStmt->close();
+        exit();
+    }
+    $checkStmt->close();
+
+    // Hash the password
+    $hashed_password = password_hash($password, PASSWORD_BCRYPT);
+
     // Prepare statement to prevent SQL injection
-    $stmt = $conn->prepare("INSERT INTO Users (first_name, last_name, email, password_hash, phone_number, default_delivery_address) VALUES (?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("ssssss", $firstname, $lastname, $email, password_hash($password, PASSWORD_BCRYPT), $phoneNumber, $deliveryAddress);
+    $stmt = $conn->prepare("INSERT INTO Users (first_name, last_name, email, password_hash, phone_number, default_delivery_address, gender) VALUES (?, ?, ?, ?, ?, ?, ?)");
+    // Bind parameters
+    $stmt->bind_param("sssssss", $firstname, $lastname, $email, $hashed_password, $phoneNumber, $deliveryAddress, $_POST['gender']);
 
     // Execute and redirect
     if ($stmt->execute()) {
@@ -126,6 +142,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="input-icon">
                     <i class="fas fa-user"></i>
                     <input type="text" name="last_name" placeholder="Last Name" required>
+                </div>
+                <div class="input-icon">
+                    <i class="fas fa-venus-mars"></i>
+                    <select name="gender" required>
+                        <option value="">Select Gender</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
+                    </select>
                 </div>
                 <div class="input-icon">
                     <i class="fas fa-envelope"></i>
