@@ -9,7 +9,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $lastname = trim($_POST['last_name']);
     $gender = trim($_POST['gender']); // gender
     $email = trim($_POST['email']);
-    $password = $_POST['password_hash'];
+    $password = $_POST['password'];
     $phoneNumber = trim($_POST['phone_number']);
     $deliveryAddress = trim($_POST['default_delivery_address']);
 
