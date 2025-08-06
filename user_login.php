@@ -35,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['email'] = $email;
 
             // Redirect to home page
-            header("Location: home.html");
+            header("Location: temp.html");
             exit();
         } else {
             $error = "Invalid email or password.";
