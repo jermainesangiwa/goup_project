@@ -2,6 +2,7 @@
 // Database connection using config.php
 include("config.php");
 
+// User Registration
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get and sanitize form data
     $firstname = trim($_POST['first_name']);
@@ -23,9 +24,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         echo "Error: " . $stmt->error;
     }
-
-    // created_at adds the timestamp of when user registerd
-    
 }
 
 ?>
