@@ -79,7 +79,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             text-align: center;
             color: #ffffff;
         }
-        .auth-container input[type="text"],
+        .auth-container input[type="email"],
         .auth-container input[type="password"] {
             width: 100%;
             padding: 10px;
@@ -143,7 +143,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
             <div class="input-icon">
                 <i class="fas fa-user"></i>
-                <input type="text" name="email" placeholder="Email" required>
+                <input type="email" name="email" placeholder="Email" required>
             </div>
             <div class="input-icon">
                 <i class="fas fa-lock"></i>
