@@ -77,7 +77,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
             .auth-container input[type="text"],
             .auth-container input[type="password"],
-            .auth-container input[type="email"]{
+            .auth-container input[type="email"],
+            .auth-container select {
                 width: 100%;
                 padding: 10px;
                 margin: 10px 0;
