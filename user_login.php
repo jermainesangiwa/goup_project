@@ -18,8 +18,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST['password'];
 
     // Match email
-    $stmt = $conn->prepare("SELECT user_id, email, password_hash FROM Users WHERE email = ?");
-    $stmt->bind_param("s", $input);
+    $stmt = $conn->prepare("SELECT user_id, email, password_hash FROM Users WHERE email = ? AND password_hash = ?");
+    $stmt->bind_param("ss", $input, password_hash($password, PASSWORD_BCRYPT));
     $stmt->execute();
     $stmt->store_result();
 
