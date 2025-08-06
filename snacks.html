@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHABETA Snack Stop</title>
+    <link rel="stylesheet" href="stylesnack.css">
+</head>
+<body>
+    <header>
+        <h1 id="moving-heading">SHABETA Snack Stop</h4>
+    </header>
+    <section class="hero-section"></section>
+    <div class="container">
+        <div id="snack-list" class="grid-container"></div>
+    </div>
+
+    <script>
+        const snacks = [
+            { name: "PRINGLES", price: 1.99, image: 'three-cans-of-Pringles-potato-chips.webp' },
+            { name: "TOBLERONE", price: 2.49, image: "toblerone-swiss-chocolate-variety-pack-milk-chocolate-dark-chocolate.jpg" },
+            { name: "POPCORN", price: 1.79, image: "1005848-1.jpg" },
+            { name: "CHEETOS", price: 1.69, image: "Cheetos.png" },
+            { name: "ICE CREAM", price: 3.99, image: "ice_cream.jpg" },
+            { name: "OREOS", price: 1.29, image: "biscuits.jpg" },
+            { name: "PRETZELS", price: 1.49, image: "634cfe710b39045b04324471-rold-gold-tiny-twists-pretzels-1-oz.jpg" },
+            { name: "TRAIL MIX", price: 2.99, image: "71YfgT7N8yL.jpg" },
+            { name: "GRANOLA BAR", price: 1.99, image: "611jl0m9afL.jpg" },
+            { name: "COOKIES", price: 2.29, image: "cookies.webp" },
+            { name: "GUMMY BEARS", price: 1.79, image: "gummy_bears.jpg" },
+            { name: "Potato Chips", price: 1.99, image: "potato_chips.jpg" },
+            { name: "PEANUTS", price: 1.29, image: "peanuts.jpg" },
+            { name: "M & M'S", price: 3.49, image: "cashews.jpg" },
+            { name: "NUTELLA", price: 3.99, image: "pistachios.jpg" },
+            { name: "SOUR PATCH", price: 1.79, image: "crackers.jpg" }
+        ];
+
+        const snackList = document.getElementById('snack-list');
+
+        // Function to display snacks
+        function displaySnacks() {
+            snacks.forEach(snack => {
+                const snackDiv = document.createElement('div');
+                snackDiv.classList.add('snack');
+
+                const image = document.createElement('img');
+                image.src = snack.image;
+                image.alt = snack.name;
+
+                const name = document.createElement('h3');
+                name.textContent = snack.name;
+
+                const price = document.createElement('p');
+                price.textContent = '$' + snack.price.toFixed(2);
+                price.classList.add('price'); // Add CSS class to price element
+
+                snackDiv.appendChild(image);
+                snackDiv.appendChild(name);
+                snackDiv.appendChild(price);
+
+                snackList.appendChild(snackDiv);
+            });
+        }
+
+        // Call the displaySnacks function to populate the snack list
+        displaySnacks();
+    </script>
+</body>
+</html>
