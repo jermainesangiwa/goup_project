@@ -1,4 +1,7 @@
 <?php
+// Start session to manage user registration state
+session_start();
+
 // Database connection using config.php
 include("config.php");
 

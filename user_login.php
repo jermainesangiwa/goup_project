@@ -1,11 +1,12 @@
 <?php
+session_start(); // Start session to manage user login state
+
 // Database configuration, using config.php
 include("config.php");
 
 // Take user to home page if already logged in
-if (isset($_SESSION['user_id'])) 
-{
-    header("Location: home.html");
+if (isset($_SESSION['user_id'])) {
+    header("Location: temp.html");
     exit();
 }
 
@@ -16,6 +17,11 @@ $error = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $input = trim($_POST['email']);
     $password = $_POST['password'];
+
+    // Validate email format
+    if (!filter_var($input, FILTER_VALIDATE_EMAIL)) {
+        $error = "Invalid email format.";
+    }
 
     // Match email
     $stmt = $conn->prepare("SELECT user_id, email, password_hash FROM Users WHERE email = ?");
