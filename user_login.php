@@ -6,7 +6,7 @@ include("config.php");
 
 // Take user to home page if already logged in
 if (isset($_SESSION['user_id'])) {
-    header("Location: home.php");
+    header("Location: Homepage.php");
     exit();
 }
 
@@ -41,7 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['email'] = $email;
 
             // Redirect to home page
-            header("Location: home.php");
+            header("Location: Homepage.php");
             exit();
         } else {
             $error = "Invalid email or password.";
