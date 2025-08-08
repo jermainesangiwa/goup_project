@@ -18,9 +18,173 @@ header("Pragma: no-cache");
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title> </title>
-  <link rel="stylesheet" href="style.css">
+  <title>Home - Ailse24/7</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+  <style>
+    /* Add your custom styles here */
+    /* Navigation Bar Style*/
+    .navbar {
+      background-color: #333;
+      color: #fff;
+      padding: 10px 20px;
+    }
+    .nav-logo img {
+      max-height: 50px;
+    }
+    /* Address */
+    .address {
+      display: flex;
+      align-items: center;
+    }
+    .address .deliver {
+      margin-right: 10px;
+    }
+    .address .map-icon {
+      margin-left: 5px;
+    }
+    /* Search */
+    .nav-search {
+      display: flex;
+      align-items: center;
+      margin-left: 20px;
+    }
+    .nav-search .select-search {
+      padding: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      margin-right: 10px;
+    }
+    .nav-search .search-input {
+      padding: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      flex-grow: 1;
+    }
+    .nav-search .search-icon {
+      margin-left: 5px;
+    }
+    /* Sign In, Returns, Cart */
+    .sign-in, .returns, .cart {
+      margin-left: 20px;
+    }
+    .sign-in a, .returns a, .cart a {
+      color: #fff;
+      text-decoration: none;
+    }
+    .sign-in a:hover, .returns a:hover, .cart a:hover {
+      text-decoration: underline;
+    }
+    /* Banner */
+    .banner {
+      background-color: #f8f8f8;
+      padding: 20px;
+      text-align: center;
+    }
+    .banner-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .panel {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .panel span {
+      margin-right: 5px;
+    }
+    .links {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .links li {
+      margin: 0 10px;
+    }
+    .deals {
+      margin-top: 10px;
+    }
+
+    /* Hero section */
+    .hero-section {
+      background-image: url('hero-background.jpg');
+      background-size: cover;
+      background-position: center;
+      height: 400px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      text-align: center;
+    }
+    .hero-section h1 {
+      font-size: 3em;
+      margin: 0;
+    }
+    .hero-section p {
+      font-size: 1.5em;
+    }
+    /* Shop section */
+    .shop-section {
+      padding: 20px;
+    }
+    .shop-images {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+    .shop-link {
+      flex: 1 1 calc(25% - 10px);
+      margin: 5px;
+      text-align: center;
+    }
+    .shop-link img {
+      max-width: 100%;
+      height: auto;
+    }
+    .shop-link h3 {
+      font-size: 1.2em;
+      margin: 10px 0;
+    }
+    
+    /* Footer */
+    .footer {
+      background-color: #333;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+    }
+    .footer-title {
+      font-size: 1.5em;
+      margin-bottom: 10px;
+    }
+    .footer-items {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .footer-items ul {
+      list-style: none;
+      padding: 0;
+      margin: 0 20px;
+    }
+    .footer-items li {
+      margin-bottom: 5px;
+    }
+    .footer-items a {
+      color: #fff;
+      text-decoration: none;
+    }
+    .footer-items a:hover {
+      text-decoration: underline;
+    }
+
+  </style>
 </head>
 <body>
     <header>
