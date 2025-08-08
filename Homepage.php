@@ -8,6 +8,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 // Prevent browser from caching this page
+header("Expires: Sat, 01 Jan 2000 00:00:00 GMT"); // Proxies
 header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
@@ -151,7 +152,41 @@ header("Pragma: no-cache");
       font-size: 1.2em;
       margin: 10px 0;
     }
-    
+
+    /* Product section */
+    .product-section {
+      padding: 20px;
+    }
+    .product-card {
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 10px;
+      text-align: center;
+      margin: 10px;
+    }
+    .product-card img {
+      max-width: 100%;
+      height: auto;
+    }
+    .product-card h3 {
+      font-size: 1.2em;
+      margin: 10px 0;
+    }
+    .product-card .price {
+      font-size: 1.1em;
+      color: #b12704;
+    }
+    .product-card button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 10px 15px;
+      cursor: pointer;
+    }
+    .product-card button:hover {
+      background-color: #45a049;
+    }
     /* Footer */
     .footer {
       background-color: #333;
@@ -212,11 +247,16 @@ header("Pragma: no-cache");
             <span class="material-symbols-outlined">search</span>
           </div>
         </div>
-
-        <div class="sign-in">
-         <a href="#"> <p>Hello, sign in</p>
-          <span>Account &amp; Lists</span></a>
-        </div>
+        <?php if (isset($_SESSION['user_id'])): ?>
+          <div class="sign-in">
+          <a href="#"><p>Hello, <?php echo htmlspecialchars($_SESSION['email']); ?></p>
+          <a href="logout.php">Logout</a>
+          </div>
+          <?php else: ?>
+            <div class="sign-in">
+              <a href="user_login.php">Sign In</a>
+            </div>
+          <?php endif; ?>
 
         <div class="returns">
           <a href="#"><p>Returns</p>
@@ -275,6 +315,26 @@ header("Pragma: no-cache");
           <img src="cold-drink-recipe-formulation.jpeg" alt="card">
           <a href="#">Shop now</a>
         </div>
+      </div>
+    </section>
+    <section class="product-section">
+      <h2>Top pick for You</h2>
+      <div class="product-grid">
+        <!-- Product items will be dynamically generated here -->
+         <div class="product-card">
+          <img src="product1.jpg" alt="Product 1">
+          <h3>Product 1</h3>
+          <p>Short description of Product 1.</p>
+          <span class="price">₹499</span>
+          <button>Add to Cart</button>
+         </div>
+         <div class="product-card">
+          <img src="product2.jpg" alt="Product 2">
+          <h3>Product 2</h3>
+          <p>Short description of Product 2.</p>
+          <span class="price">₹199</span>
+          <button>Add to Cart</button>
+         </div>
       </div>
     </section>
 
