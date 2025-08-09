@@ -394,7 +394,9 @@ header("Pragma: no-cache");
       </div>
     </header>
 
-    <section class="hero-section"></section>
+    <section class="hero-section">
+      
+    </section>
     <section class="shop-section">
       <div class="shop-images">
         <div class="shop-link">
