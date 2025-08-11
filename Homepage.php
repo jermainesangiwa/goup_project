@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <?php
 session_start();
+include("config.php");
 
 if (!isset($_SESSION['user_id'])) {
     header("Location: user_login.php");
@@ -369,7 +370,7 @@ header("Pragma: no-cache");
 
         <!-- Account -->
         <div class="nav-account">
-          <span>Hello, <?php echo $_SESSION['user_email']; ?></span>
+          <span>Hello, <?php echo $_SESSION['email']; ?></span>
           <strong>Account & Lists</strong>
         </div>
 
