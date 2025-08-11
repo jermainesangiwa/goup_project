@@ -328,7 +328,7 @@ header("Pragma: no-cache");
     <header>
       <nav class="navbar">
         <div class="nav-logo">
-          <a href="#"><img src="shabeta-high-resolution-logo.png" alt="logo"></a>
+          <a href="#"><img src="icon8-buy-100.png" alt="logo"></a>
         </div>
         <div class="address">
           <a href="#" class="deliver">Deliver</a>
@@ -344,7 +344,7 @@ header("Pragma: no-cache");
             <option>All Categories</option>
             <option>Amazon Devices</option>
           </select>
-          <input type="text" placeholder="Search SHABETA" class="search-input">
+          <input type="text" placeholder="Search Ailse24/7" class="search-input">
           <div class="search-icon">
             <span class="material-symbols-outlined">search</span>
           </div>
@@ -426,7 +426,7 @@ header("Pragma: no-cache");
       <div class="product-grid">
         <!-- Product items will be dynamically generated here -->
          <div class="product-card">
-          <img src="product1.jpg" alt="Product 1">
+          <img src="sweets_snacks_expo_2022_floor.jpg" alt="Snacks">" alt="Product 1">
           <h3>Product 1</h3>
           <p>Short description of Product 1.</p>
           <span class="price">₹499</span>
