@@ -328,7 +328,7 @@ header("Pragma: no-cache");
     <header>
       <nav class="navbar">
         <div class="nav-logo">
-          <a href="#"><img src="icon8-buy-100.png" alt="logo"></a>
+          <a href="#"><img src="icons8-buy-100.png" alt="logo"></a>
         </div>
         <div class="address">
           <a href="#" class="deliver">Deliver</a>
