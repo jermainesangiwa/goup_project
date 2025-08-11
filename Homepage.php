@@ -426,7 +426,7 @@ header("Pragma: no-cache");
       <div class="product-grid">
         <!-- Product items will be dynamically generated here -->
          <div class="product-card">
-          <img src="sweets_snacks_expo_2022_floor.jpg" alt="Snacks">" alt="Product 1">
+          <img src="sweets_snacks_expo_2022_floor.jpg" alt="Snacks">
           <h3>Product 1</h3>
           <p>Short description of Product 1.</p>
           <span class="price">₹499</span>
