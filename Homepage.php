@@ -127,6 +127,12 @@ header("Pragma: no-cache");
     .nav-account strong {
       font-size: 0.9rem;
     }
+    .nav-account-logout{
+      font-size: 0.75rem;
+      color: #007185;
+      text-decoration: none;
+      padding: 4px;
+    }
 
     /* Order section */
     .nav-orders {
@@ -176,6 +182,15 @@ header("Pragma: no-cache");
       padding: 4px;
     }
     .bottom-nav a:hover {
+      border: 1px solid white;
+      border-radius: 2px;
+    }
+    .nav-account-logout a{
+      color: white;
+      text-decoration: none;
+      padding: 4px;
+    }
+    .nav-account-logout a:hover {
       border: 1px solid white;
       border-radius: 2px;
     }
@@ -372,6 +387,11 @@ header("Pragma: no-cache");
         <div class="nav-account">
           <span>Hello, <?php echo $_SESSION['email']; ?></span>
           <strong>Account & Lists</strong>
+        </div>
+
+        <!-- Logout Link -->
+        <div class="nav-account-logout">
+          <a href="logout.php">Logout</a>
         </div>
 
         <!-- Orders -->
