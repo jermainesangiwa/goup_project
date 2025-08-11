@@ -1,18 +1,4 @@
 <!DOCTYPE html>
-<?php
-session_start();
-
-if (!isset($_SESSION['user_id'])) {
-    header("Location: user_login.php");
-    exit();
-}
-
-// Prevent browser from caching this page
-header("Expires: Sat, 01 Jan 2000 00:00:00 GMT"); // Proxies
-header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
-header("Cache-Control: post-check=0, pre-check=0", false);
-header("Pragma: no-cache");
-?>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
