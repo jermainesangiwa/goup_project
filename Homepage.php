@@ -43,7 +43,8 @@ header("Pragma: no-cache");
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Home - Ailse24/7</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+  <!-- Google Icons -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
   <style>
     /* General Styles */
     * {
@@ -115,7 +116,80 @@ header("Pragma: no-cache");
     }
 
     /* Account section */
-    
+    .nav-account {
+      display: flex;
+      flex-direction: column;
+      font-size: 0.75rem;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .nav-account strong {
+      font-size: 0.9rem;
+    }
+
+    /* Order section */
+    .nav-orders {
+      display: flex;
+      flex-direction: column;
+      font-size: 0.75rem;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .nav-orders strong {
+      font-size: 0.9rem;
+    }
+
+    /* Cart section */
+    .nav-cart {
+      display: flex;
+      align-items: center;
+      font-size: 0.9rem;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .nav-cart span {
+      font-size: 1.5rem;
+      margin-right: 5px;
+    }
+
+    /* Hover effects for clickable items */
+    .top-nav > div:hover,
+    .top-nav form:hover {
+      border: 1px solid white;
+      border-radius: 2px;
+    }
+
+    /* ===== BOTTOM NAVBAR ===== */
+    .bottom-nav {
+      background-color: #232f3e;
+      color: white;
+      display: flex;
+      align-items: center;
+      padding: 8px 15px;
+      gap: 20px;
+      font-size: 0.9rem;
+    }
+    .bottom-nav a {
+      color: white;
+      text-decoration: none;
+      padding: 4px;
+    }
+    .bottom-nav a:hover {
+      border: 1px solid white;
+      border-radius: 2px;
+    }
+
+    /* ===== BANNER SECTION ===== */
+    .banner {
+      width: 100%;
+      height: 350px; /* Adjust height as needed */
+      overflow: hidden;
+    }
+    .banner img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* Makes the image fill the space without distortion */
+    }
 
     /* Hero section placeholder */
     .hero-section {
@@ -157,11 +231,9 @@ header("Pragma: no-cache");
       object-fit: cover;
       border-radius: 8px;
     }
-
     .shop-link h3 {
       margin-bottom: 10px;
     }
-
     .shop-link a {
       color: #007185;
       font-weight: bold;
@@ -171,18 +243,15 @@ header("Pragma: no-cache");
     .product-section {
       padding: 30px;
     }
-
     .product-section h2 {
       text-align: center;
       margin-bottom: 20px;
     }
-
     .product-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 20px;
     }
-
     .product-card {
       background: white;
       border-radius: 12px;
@@ -191,11 +260,9 @@ header("Pragma: no-cache");
       text-align: center;
       transition: transform 0.3s;
     }
-
     .product-card:hover {
       transform: translateY(-5px);
     }
-
     .product-card img {
       width: 100%;
       height: 180px;
@@ -203,25 +270,21 @@ header("Pragma: no-cache");
       border-radius: 8px;
       margin-bottom: 10px;
     }
-
     .product-card h3 {
       font-size: 18px;
       margin: 10px 0 5px;
     }
-
     .product-card p {
       font-size: 14px;
       color: #666;
       margin-bottom: 10px;
     }
-
     .price {
       display: block;
       font-size: 16px;
       color: #e60023;
       margin-bottom: 10px;
     }
-
     .product-card button {
       padding: 10px 20px;
       background-color: #28a745;
@@ -231,7 +294,6 @@ header("Pragma: no-cache");
       cursor: pointer;
       font-size: 14px;
     }
-
     .product-card button:hover {
       background-color: #218838;
     }
@@ -243,41 +305,34 @@ header("Pragma: no-cache");
       padding: 40px 20px;
       margin-top: 40px;
     }
-
     .footer-title {
       text-align: center;
       display: block;
       color: #fff;
       margin-bottom: 30px;
     }
-
     .footer-items {
       display: flex;
       flex-wrap: wrap;
       justify-content: space-around;
     }
-
     .footer-items ul {
       list-style: none;
       width: 200px;
     }
-
     .footer-items h3 {
       font-size: 16px;
       color: #fff;
       margin-bottom: 10px;
     }
-
     .footer-items li {
       margin: 8px 0;
     }
-
     .footer-items a {
       color: #ccc;
       text-decoration: none;
       font-size: 14px;
     }
-
     .footer-items a:hover {
       color: #fff;
     }
@@ -285,76 +340,66 @@ header("Pragma: no-cache");
 </head>
 <body>
     <header>
-      <nav class="navbar">
+      <!-- TOP NAVBAR -->
+      <div class="top-nav">
+        <!-- Logo -->
         <div class="nav-logo">
-          <a href="#"><img src="icons8-buy-100.png" alt="logo"></a>
+          <img src="your-logo.png" alt="Ailse24/7 Logo">
         </div>
-        <div class="address">
-          <a href="#" class="deliver">Deliver</a>
-          <div class="map-icon">
-            <span class="material-symbols-outlined">location_on</span>
-            <a href="#" class="location">INDIA</a>
+
+        <!-- Location -->
+        <div class="nav-location">
+          <span class="material-symbols-outlined">location_on</span>
+          <div class="nav-location-text">
+            <span>Deliver to</span>
+            <strong>INDIA</strong>
           </div>
         </div>
 
-        <div class="nav-search">
-          <select class="select-search">
+        <!-- Search Bar -->
+        <form class="nav-search">
+          <select>
             <option>All</option>
-            <option>All Categories</option>
-            <option>Amazon Devices</option>
           </select>
-          <input type="text" placeholder="Search Ailse24/7" class="search-input">
-          <div class="search-icon">
+          <input type="text" placeholder="Search Ailse24/7">
+          <button type="submit">
             <span class="material-symbols-outlined">search</span>
-          </div>
-        </div>
-        <?php if (isset($_SESSION['user_id'])): ?>
-          <div class="sign-in">
-          <a href="#"><p>Hello, <?php echo htmlspecialchars($_SESSION['email']); ?></p>
-          <a href="logout.php">Logout</a>
-          </div>
-          <?php else: ?>
-            <div class="sign-in">
-              <a href="user_login.php">Sign In</a>
-            </div>
-          <?php endif; ?>
+          </button>
+        </form>
 
-        <div class="returns">
-          <a href="#"><p>Returns</p>
-            <span>&amp; Orders</span></a>
+        <!-- Account -->
+        <div class="nav-account">
+          <span>Hello, <?php echo $_SESSION['user_email']; ?></span>
+          <strong>Account & Lists</strong>
         </div>
 
-        <div class="cart">
-          <a href="#">
-            <span class="material-symbols-outlined cart-icon">shopping_cart</span>
-            </a>
-            <p>Cart</p>
+        <!-- Orders -->
+        <div class="nav-orders">
+          <span>Returns</span>
+          <strong>& Orders</strong>
         </div>
-      </nav>
-      
-      <div class="banner">
-        <div class="banner-content">
-          <div class="panel">
-            <span class="material-symbols-outlined">menu</span>
-            <a href="#">All</a>
-          </div>
-  
-          <ul class="links">
-            <li><a href="#">Today's Deals</a></li>
-            <li><a href="#">Customer Service</a></li>
-            <li><a href="#">Registry</a></li>
-            <li><a href="#">Gift Cards</a></li>
-            <li><a href="#">Sell</a></li>
-          </ul>
-          <div class="deals">
-            <a href="#">Shop according to Diet</a>
-          </div>
+
+        <!-- Cart -->
+        <div class="nav-cart">
+          <span class="material-symbols-outlined">shopping_cart</span>
+          Cart
         </div>
       </div>
-    </header>
 
+      <!-- BOTTOM NAVBAR -->
+      <div class="bottom-nav">
+        <a href="#">All</a>
+        <a href="#">Today's Deals</a>
+        <a href="#">Customer Service</a>
+        <a href="#">Registry</a>
+        <a href="#">Gift Cards</a>
+        <a href="#">Sell</a>
+      </div>
+    </header>
     <section class="hero-section">
-      
+      <div class="banner">
+        <img src="banner.jpg" alt="Promotional Banner">
+      </div>
     </section>
     <section class="shop-section">
       <div class="shop-images">
