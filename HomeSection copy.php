@@ -1,16 +1,30 @@
 <!DOCTYPE html>
+<?php
+session_start();
+
+if (!isset($_SESSION['user_id'])) {
+    header("Location: user_login.php");
+    exit();
+}
+
+// Prevent browser from caching this page
+header("Expires: Sat, 01 Jan 2000 00:00:00 GMT"); // Proxies
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+?>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SHABETA'S Fruit Shop</title>
+    <title>Ailse 24/7</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
     <header>
         <div class="header-content">
             <div class="branding">
-                <h1>SHABETA'S Fruit Shop</h1>
+                <h1>Ailse 24/7</h1>
                 
             </div>
             <div class="social-icons">
@@ -202,7 +216,7 @@
         #social-icon{
             border-spacing: 15px;
             border-bottom: 55px;
-            background color-scheme: #ffff;
+            background-color: '#2ecc71'; /* Green background for social icons */
         }
     </style>
     <script>
