@@ -57,7 +57,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         body {
             font-family: Arial, sans-serif;
-            background: url('grocery-collage.png') repeat;
+            background: url('https://github.com/jermainesangiwa/goup_project/blob/main/Untitled%20design%20(2).png') repeat;
             background-size: 400px auto; /* adjust tile size */
             animation: scrollUp 30s linear infinite;
             color: #ffffff;
