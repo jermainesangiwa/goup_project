@@ -1,46 +1,31 @@
 <?php
-session_start(); // Start session to manage user login state
-
-// Database configuration, using config.php
+session_start();
 include("config.php");
 
-// Take user to home page if already logged in
+
 if (isset($_SESSION['user_id'])) {
     header("Location: Homepage.php");
     exit();
 }
 
-// Initialize error message
 $error = "";
 
-// Handle form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $input = trim($_POST['email']);
     $password = $_POST['password'];
 
-    // Validate email format
-    if (!filter_var($input, FILTER_VALIDATE_EMAIL)) {
-        $error = "Invalid email format.";
-    }
-
-    // Match email
     $stmt = $conn->prepare("SELECT user_id, email, password_hash FROM Users WHERE email = ?");
     $stmt->bind_param("s", $input);
     $stmt->execute();
     $stmt->store_result();
 
-    // Check if user exists
     if ($stmt->num_rows === 1) {
         $stmt->bind_result($user_id, $email, $hashed_password);
         $stmt->fetch();
 
-        // Verify password
         if (password_verify($password, $hashed_password)) {
-            // Password is correct, set session variables
             $_SESSION['user_id'] = $user_id;
             $_SESSION['email'] = $email;
-
-            // Redirect to home page
             header("Location: Homepage.php");
             exit();
         } else {
@@ -52,113 +37,146 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->close();
 }
 ?>
-
-<!-- HTML for USER login form -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Login - Ailse24/7</title>
-    <!-- Font Awesome CDN -->
+    <title>Aisle24/7 - Login</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Dark mode styles -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
         body {
-            background-color: #121212;
-            color: #ffffff;
-            font-family: Arial, sans-serif;
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: url('grocery-bg.jpg') no-repeat center center/cover;
         }
-        /* Use boder-box globally */
-        *, *:before, *:after {
-            box-sizing: border-box;
+        .overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.55);
+            backdrop-filter: blur(4px);
         }
-        .auth-container {
-            max-width: 400px;
-            margin: 50px auto;
-            padding: 20px;
-            border: 1px solid #333;
-            border-radius: 5px;
-            background-color: #1e1e1e;
-        }
-        h2 {
-            text-align: center;
-            color: #ffffff;
-        }
-        .auth-container input[type="email"],
-        .auth-container input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #333;
-            border-radius: 5px;
-            background-color: #2a2a2a;
-            color: #ffffff;
-        }
-        .auth-container button {
-            width: 100%;
-            padding: 10px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .auth-container button:hover {
-            background-color: #45a049;
-        }
-        .auth-container p {
-            text-align: center;
-            color: #ffffff;
-        }
-        .auth-container p a {
-            color: #4CAF50;
-        }
-        .auth-container p a:hover {
-            color: #45a049;
-        }
-        .input-icon {
+        .container {
             position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            color: #fff;
         }
-        .input-icon input {
-            width: calc(100% - 40px); /* Adjust width to account for icon */
-            margin: 0 20px auto; /* Center the input */
-            padding-left: 40px; /* Prevents text overlap with icon */
+        .brand {
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
         }
-        .input-icon i {
+        .login-box {
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 15px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        .login-box h2 {
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        .input-group {
+            position: relative;
+            margin-bottom: 15px;
+        }
+        .input-group i {
             position: absolute;
-            left: 12px;
             top: 50%;
+            left: 12px;
             transform: translateY(-50%);
-            width: 20px; /* Limit icon width */
-            pointer-events: none; /* Prevents icon from capturing clicks */
-            color: #888;
+            color: #ccc;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 12px 12px 12px 40px;
+            border: none;
+            border-radius: 8px;
+            outline: none;
+            font-size: 14px;
+            background: rgba(255,255,255,0.2);
+            color: #fff;
+        }
+        .input-group input::placeholder {
+            color: #ddd;
+        }
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.2);
+            color: #fff;
+            font-weight: bold;
+            font-size: 15px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .btn:hover {
+            background: rgba(255,255,255,0.4);
+        }
+        .links {
+            margin-top: 10px;
+            font-size: 13px;
+        }
+        .links a {
+            color: #fff;
+            text-decoration: underline;
+        }
+        .remember {
+            text-align: left;
+            margin: 10px 0;
+            font-size: 13px;
         }
         .error-message {
+            background: rgba(255, 0, 0, 0.2);
             color: #ff6b6b;
-            text-align: center;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
         }
     </style>
 </head>
 <body>
-    <div class="auth-container">
-        <h2><i class="fas fa-sign-in-alt"></i> User Login</h2>
-        <?php if (!empty($error)): ?>
-            <div class="error-message"><?php echo $error; ?></div>
-        <?php endif; ?>
-        <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-            <div class="input-icon">
-                <i class="fas fa-user"></i>
-                <input type="email" name="email" placeholder="Email" required>
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="brand">AISLE24/7</div>
+        <div class="login-box">
+            <h2>Login</h2>
+            <?php if (!empty($error)): ?>
+                <div class="error-message"><?php echo $error; ?></div>
+            <?php endif; ?>
+            <form method="POST">
+                <div class="input-group">
+                    <i class="fas fa-user"></i>
+                    <input type="email" name="email" placeholder="Email" required>
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" name="password" placeholder="Password" required>
+                </div>
+                <div class="remember">
+                    <input type="checkbox" id="remember" name="remember">
+                    <label for="remember">Remember Me</label>
+                </div>
+                <button type="submit" class="btn">Sign In</button>
+            </form>
+            <div class="links">
+                <p>Don't have an account? <a href="user_register.php">Sign Up</a></p>
+                <p><a href="forgot_password.php">Forgot password?</a></p>
+                <p><a href="store_login.php">Login as store</a></p>
             </div>
-            <div class="input-icon">
-                <i class="fas fa-lock"></i>
-                <input type="password" name="password" placeholder="Password" required>
-            </div>
-            <button type="submit">Login</button>
-        </form>
-        <p>Don't have an account? <a href="user_register.php">Register here as user</a></p>
-        <p>Login as store? <a href="store_login.php">Login as store here</a></p>
+        </div>
     </div>
 </body>
 </html>
