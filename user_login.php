@@ -128,7 +128,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         .input-icon {
             display: flex;
             align-items: center;
-            background-color: #222;
+            background: transparent;
             border-radius: 5px;
             padding: 8px 5px;
         }
