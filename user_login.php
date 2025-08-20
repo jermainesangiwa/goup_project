@@ -126,19 +126,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         .input-icon {
-            position: relative;
+            display: flex;
+            align-items: center;
+            background-color: #222;
+            border-radius: 5px;
+            padding: 8px 5px;
         }
 
-        .input-icon input {
-            padding-left: 40px;
+        .input-icon input,
+        .input-icon select {
+            flex: 1; /* take up remaining space */
+            font-size: 14px;
+            border: none;
+            outline: none;
+            background: transparent;
+            color: #fff;
         }
 
         .input-icon i {
-            position: absolute;
-            left: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #888;
+            color: #aaa;
+            margin-right: 10px; /* Space between icon and input */
+            font-size: 16px;
         }
 
         .error-message {
