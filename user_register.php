@@ -58,7 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <!-- Dark mode styles -->
         <style>
             body {
-                background-image:url('Background_Image_1.png') repeat;
+                background:url('Background_Image_1.png') repeat;
                 color: #ffffff;
                 font-family: Arial, sans-serif;
             }
@@ -72,7 +72,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 padding: 20px;
                 border: 1px solid #333;
                 border-radius: 5px;
-                background-color: #1e1e1e;
+                background-color: rgba(0, 0, 0, 0.5);
             }
             h2 {
                 text-align: center;
