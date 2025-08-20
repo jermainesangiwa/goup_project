@@ -126,21 +126,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 color: #45a049;
             }
             .input-icon {
-                position: relative;
+                display: flex;
+                align-items: center;
+                background: transparent;
+                border-radius: 5px;
+                padding: 8px 5px;
             }
-            .input-icon input {
-                width: calc(100% - 40px); /* Adjust width to account for icon */
-                margin: 0 20px auto; /* Center the input */
-                padding-left: 40px; /* Prevents text overlap with icon */
+
+            .input-icon input,
+            .input-icon select {
+                flex: 1; /* take up remaining space */
+                font-size: 14px;
+                border: none;
+                outline: none;
+                background: transparent;
+                color: #fff;
             }
+
             .input-icon i {
-                position: absolute;
-                left: 12px;
-                top: 50%;
-                transform: translateY(-50%);
-                width: 20px; /* Limit icon width */
-                pointer-events: none; /* Prevents icon from capturing clicks */
-                color: #888;
+                color: #aaa;
+                margin-right: 10px; /* Space between icon and input */
+                font-size: 16px;
             }
             .error-message {
                 color: #ff6b6b;
