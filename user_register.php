@@ -58,7 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <!-- Dark mode styles -->
         <style>
             body {
-                background-color:url('Background_Image_1.png') repeat;
+                background-image:url('Background_Image_1.png') repeat;
                 color: #ffffff;
                 font-family: Arial, sans-serif;
             }
