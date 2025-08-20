@@ -58,9 +58,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <!-- Dark mode styles -->
         <style>
             body {
-                background:url('Background_Image_1.png') repeat;
+                font-family: Arial, Helvetica, sans-serif;
+                background: url('Background_Image_1.png') repeat;
+                background-size: 400px auto; /* adjust tile size */
+                animation: scrollUp 30s linear infinite;
                 color: #ffffff;
-                font-family: Arial, sans-serif;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
             }
             /* Use boder-box globally */
             *, *:before, *:after {
