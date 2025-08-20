@@ -68,7 +68,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 align-items: center;
                 height: 100vh;
             }
-            /* Use boder-box globally */
+
+            /* Background Animation */
+            @keyframes scrollUp {
+                from { background-position: 0 0; }
+                to { background-position: 0 -100%; }
+            }
+
+            /* Use border-box globally */
             *, *:before, *:after {
                 box-sizing: border-box;
             }
