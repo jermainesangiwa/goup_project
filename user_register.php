@@ -142,27 +142,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 background: transparent;
                 color: #fff;
             }
-            .input-icon-gender{
-                display: flex;
-                align-items: center;
-                background: transparent;
-                border-radius: 5px;
-                padding: 8px 5px;
-            }
-            .input-icon-gender i {
-                color: #aaa;
-                margin-right: 10px; /* Space between icon and input */
-                font-size: 16px;
-            }
-            .input-icon-gender input,
-            .input-icon-gender select {
-                flex: 1; /* take up remaining space */
-                font-size: 14px;
-                border: none;
-                outline: none;
-                background: transparent;
-                color: #333;
-            }
             .input-icon i {
                 color: #aaa;
                 margin-right: 10px; /* Space between icon and input */
@@ -182,7 +161,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <i class="fas fa-user"></i>
                     <input type="text" name="first_name" placeholder="First Name" required>
                 </div>
-                <div class="input-icon-gender">
+                <div class="input-icon">
                     <i class="fas fa-user"></i>
                     <input type="text" name="last_name" placeholder="Last Name" required>
                 </div>
