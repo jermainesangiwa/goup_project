@@ -536,19 +536,23 @@
     <section class="cats container" id="cats">
         <div class="cat-card active" data-cat="all">
             <i class="material-icons" style="font-size:40px;color:#2b7a78;">local_grocery_store</i>
-            <div class="label">Fruits</div>
+            <div class="label">All</div>
         </div>
-        <div class="cat-card" data-cat="drinks">
-            <i class="material-icons" style="font-size:40px;color:#2b7a78;">local_drink</i>
-            <div class="label">Drinks</div>
+        <div class="cat-card" data-cat="food">
+            <i class="material-icons" style="font-size:40px;color:#2b7a78;">restaurant</i>
+            <div class="label">Food & Fruits</div>
         </div>
         <div class="cat-card" data-cat="snacks">
             <i class="material-icons" style="font-size:40px;color:#2b7a78;">fastfood</i>
-            <div class="label">Snacks</div>
+            <div class="label">Snacks & Drinks</div>
+        </div>
+        <div class="cat-card" data-cat="pharmacy">
+            <i class="material-icons" style="font-size:40px;color:#2b7a78;">local_pharmacy</i>
+            <div class="label">Pharmacy</div>
         </div>
         <div class="cat-card" data-cat="stationary">
             <i class="material-icons" style="font-size:40px;color:#2b7a78;">edit</i>
-            <div class="label">Stationary</div>
+            <div class="label">Stationaries</div>
         </div>
     </section>
 
