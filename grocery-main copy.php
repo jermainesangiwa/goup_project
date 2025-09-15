@@ -8,7 +8,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Online Grocery Store - Snacks & Drinks</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -536,7 +536,7 @@
     <!-- Navigation -->
     <nav class="sectionbar">
         <div class="container sectionbar-inner">
-            <i class="material-icons menu-icon">menu</i>
+            <i class="material-icons">menu</i>
             <div class="nav-link active" data-filter="all">All</div>
             <div class="nav-link" data-filter="deal">Today's deal</div>
             <div class="nav-link" data-filter="best">Best selling</div>
@@ -554,8 +554,12 @@
             <div class="slide" style="background-image:url('assets/grocery_banner_1.png');"></div>
             <div class="slide" style="background-image:url('assets/grocery_banner_2.png');"></div>
         </div>
-        <div class="carousel-btn left" id="btnPrev" aria-label="Previous">◀</div>
-        <div class="carousel-btn right" id="btnNext" aria-label="Next">▶</div>
+        <div class="carousel-btn left" id="btnPrev" aria-label="Previous">
+            <i class="material-icons">chevron_left</i>
+        </div>
+        <div class="carousel-btn right" id="btnNext" aria-label="Next">
+            <i class="material-icons">chevron_right</i>
+        </div>
     </section>
 
     <!-- Categories -->
