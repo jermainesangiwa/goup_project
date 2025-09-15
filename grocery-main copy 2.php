@@ -9,6 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Online Grocery Store - Snacks & Drinks</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -488,64 +489,47 @@
 <body>
     <header class="topbar">
         <div class="container topbar-content">
-            <!-- Location -->
             <div class="location">
-                <i class="material-icons">place</i>
+                <div class="location-icon" aria-hidden="true"></div>
                 <div class="location-text">Location 140301 RD</div>
             </div>
-
-            <!-- Search -->
             <div class="search-wrap">
                 <div class="search" role="search">
                     <input id="searchInput" type="text" placeholder="Search here....." aria-label="Search here" />
-                    <div class="search-btn">
-                        <i class="material-icons">search</i>
-                    </div>
+                    <div class="search-btn"><span class="lens" aria-hidden="true"></span></div>
                 </div>
             </div>
-
-            <!-- Cart -->
             <div class="cart-wrap" onclick="openCart()">
-                <div class="cart-icon">
-                    <i class="material-icons">shopping_cart</i>
+                <div class="cart-icon" aria-hidden="true">
                     <span id="cartBadge" class="cart-badge">0</span>
                 </div>
                 <div class="cart-text">Cart</div>
             </div>
-
-            <!-- Auth / Profile -->
             <div class="auth">
                 <?php if (isset($_SESSION['user_id']) && isset($_SESSION['first_name'])): ?>
                     <span style="color:#fff;font-weight:700;font-size:16px;">
-                        <i class="material-icons">account_circle</i>
+                        <i class="fas fa-user-circle"></i>
                         Hello, <?php echo htmlspecialchars($_SESSION['first_name']); ?>
                     </span>
-                    <a href="logout.php" style="margin-left:15px;color:#fff;font-size:14px;">
-                        <i class="material-icons" style="vertical-align:middle;font-size:18px;">logout</i> Logout
-                    </a>
+                    <a href="logout.php" style="margin-left:15px;color:#fff;font-size:14px;">Logout</a>
                 <?php else: ?>
-                    <a href="user_login.php">
-                        <i class="material-icons" style="vertical-align:middle;">login</i>
-                        Login/sign up · Account
-                    </a>
+                    <a href="user_login.php">Login/sign up · Account</a>
                 <?php endif; ?>
             </div>
         </div>
     </header>
 
-    <!-- Navigation -->
     <nav class="sectionbar">
         <div class="container sectionbar-inner">
-            <i class="material-icons menu-icon">menu</i>
+            <div class="menu-icon" aria-hidden="true"></div>
             <div class="nav-link active" data-filter="all">All</div>
             <div class="nav-link" data-filter="deal">Today's deal</div>
-            <div class="nav-link" data-filter="best">Best selling</div>
+            <div class="nav-link" data-filter="best">Best sellig</div>
             <div class="nav-link" data-filter="gift">Gift cards</div>
             <div class="nav-link" data-filter="service">Customer service</div>
         </div>
     </nav>
 
-    <!-- Promo banners -->
     <section class="promo container">
         <div id="slides" class="slides">
             <div class="slide" style="background-image:url('assets/grocery_banner_5-31f79d.png');"></div>
@@ -558,22 +542,21 @@
         <div class="carousel-btn right" id="btnNext" aria-label="Next">▶</div>
     </section>
 
-    <!-- Categories -->
     <section class="cats container" id="cats">
         <div class="cat-card" data-cat="fruits" onclick="navigateToCategory('fruits')">
-            <i class="material-icons" style="font-size:40px;color:#2b7a78;">local_grocery_store</i>
+            <div class="img" style="background-image:url('assets/cat_fruits.png');"></div>
             <div class="label">Fruits</div>
         </div>
         <div class="cat-card active" data-cat="snacks-drinks" onclick="navigateToCategory('snacks-drinks')">
-            <i class="material-icons" style="font-size:40px;color:#2b7a78;">local_drink</i>
+            <div class="img" style="background-image:url('assets/cat_drinks.png');"></div>
             <div class="label">Snacks & Drinks</div>
         </div>
         <div class="cat-card" data-cat="stationary" onclick="navigateToCategory('stationary')">
-            <i class="material-icons" style="font-size:40px;color:#2b7a78;">edit</i>
-            <div class="label">Stationery</div>
+            <div class="img" style="background-image:url('assets/cat_stationary.png');"></div>
+            <div class="label">Stationary</div>
         </div>
         <div class="cat-card" data-cat="pharmacy" onclick="navigateToCategory('pharmacy')">
-            <i class="material-icons" style="font-size:40px;color:#2b7a78;">medication</i>
+            <div class="img" style="background-image:url('assets/cat_pharmacy.png');"></div>
             <div class="label">Pharmacy</div>
         </div>
     </section>
@@ -582,7 +565,6 @@
 
     <section class="grid container" id="grid"></section>
 
-    <!-- Footer -->
     <footer class="footer">
         <div class="back-top" id="backTop">Back to top</div>
         <div class="footer-inner">
@@ -605,8 +587,8 @@
             <div>
                 <h4>Make Money with Us</h4>
                 <ul>
-                    <li>Sell on Aisle247</li>
-                    <li>Sell under Aisle247</li>
+                    <li>Sell on Ailse247</li>
+                    <li>Sell under Ailse247</li>
                     <li>Protect and build your brand</li>
                 </ul>
             </div>
@@ -614,6 +596,7 @@
     </footer>
 
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
     <script>
         let cart = JSON.parse(localStorage.getItem('groceryCart')) || [];
         let cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
