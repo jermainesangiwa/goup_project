@@ -9,7 +9,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Online Grocery Store</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif; color: #000; background: #fff; }
@@ -121,20 +121,28 @@
     <script>const IMG=(p)=>p; </script>
 </head>
 <body>
-    <header class="topbar">
+     <header class="topbar">
         <div class="container topbar-content">
+            <!-- Location -->
             <div class="location">
-                <div class="location-icon" aria-hidden="true"></div>
+                <i class="material-icons">place</i>
                 <div class="location-text">Location 140301 RD</div>
             </div>
+
+            <!-- Search -->
             <div class="search-wrap">
                 <div class="search" role="search">
                     <input id="searchInput" type="text" placeholder="Search here....." aria-label="Search here" />
-                    <div class="search-btn"><span class="lens" aria-hidden="true"></span></div>
+                    <div class="search-btn">
+                        <i class="material-icons">search</i>
+                    </div>
                 </div>
             </div>
+
+            <!-- Cart -->
             <div class="cart-wrap">
-                <div class="cart-icon" aria-hidden="true">
+                <div class="cart-icon">
+                    <i class="material-icons">shopping_cart</i>
                     <span id="cartBadge" class="cart-badge">0</span>
                 </div>
                 <div class="cart-text">Cart</div>
@@ -160,17 +168,19 @@
         </div>
     </header>
 
+    <!-- Navigation -->
     <nav class="sectionbar">
         <div class="container sectionbar-inner">
-            <div class="menu-icon" aria-hidden="true"></div>
+            <i class="material-icons">menu</i>
             <div class="nav-link active" data-filter="all">All</div>
             <div class="nav-link" data-filter="deal">Today’s deal</div>
-            <div class="nav-link" data-filter="best">Best sellig</div>
+            <div class="nav-link" data-filter="best">Best selling</div>
             <div class="nav-link" data-filter="gift">Gift cards</div>
             <div class="nav-link" data-filter="service">Customer service</div>
         </div>
     </nav>
 
+    <!-- Promo banners -->
     <section class="promo container">
         <div id="slides" class="slides">
             <div class="slide" style="background-image:url('assets/grocery_banner_5-31f79d.png');"></div>
@@ -179,35 +189,39 @@
             <div class="slide" style="background-image:url('assets/grocery_banner_1.png');"></div>
             <div class="slide" style="background-image:url('assets/grocery_banner_2.png');"></div>
         </div>
-        <div class="carousel-btn left" id="btnPrev" aria-label="Previous">◀</div>
-        <div class="carousel-btn right" id="btnNext" aria-label="Next">▶</div>
+        <div class="carousel-btn left" id="btnPrev" aria-label="Previous">
+            <i class="material-icons">chevron_left</i>
+        </div>
+        <div class="carousel-btn right" id="btnNext" aria-label="Next">
+            <i class="material-icons">chevron_right</i>
+        </div>
     </section>
 
-    <!-- Categories (Fruits, Drinks, snacks, Stationary) -->
+    <!-- Categories -->
     <section class="cats container" id="cats">
         <div class="cat-card active" data-cat="all">
-            <div class="img" style="background-image:url('assets/cat_fruits.png');"></div>
+            <i class="material-icons" style="font-size:40px;color:#2b7a78;">local_grocery_store</i>
             <div class="label">Fruits</div>
         </div>
         <div class="cat-card" data-cat="drinks">
-            <div class="img" style="background-image:url('assets/cat_drinks.png');"></div>
+            <i class="material-icons" style="font-size:40px;color:#2b7a78;">local_drink</i>
             <div class="label">Drinks</div>
         </div>
         <div class="cat-card" data-cat="snacks">
-            <div class="img" style="background-image:url('assets/cat_snacks.png');"></div>
-            <div class="label">snacks</div>
+            <i class="material-icons" style="font-size:40px;color:#2b7a78;">fastfood</i>
+            <div class="label">Snacks</div>
         </div>
         <div class="cat-card" data-cat="stationary">
+            <i class="material-icons" style="font-size:40px;color:#2b7a78;">edit</i>
             <div class="label">Stationary</div>
         </div>
     </section>
 
     <h3 class="section-title container">Best of Snacks</h3>
 
-    <section class="grid container" id="grid">
-        <!-- Cards: names and prices per Figma labels/colors -->
-    </section>
+    <section class="grid container" id="grid"></section>
 
+    <!-- Footer -->
     <footer class="footer">
         <div class="back-top" id="backTop">Back to top</div>
         <div class="footer-inner">
@@ -230,8 +244,8 @@
             <div>
                 <h4>Make Money with Us</h4>
                 <ul>
-                    <li>Sell on Ailse247</li>
-                    <li>Sell under Ailse247</li>
+                    <li>Sell on Aisle247</li>
+                    <li>Sell under Aisle247</li>
                     <li>Protect and build your brand</li>
                 </ul>
             </div>
@@ -239,7 +253,6 @@
     </footer>
 
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
-
     <script>
         // Data mapped from Figma labels (subset for demo, can be extended)
         const PRODUCTS = [
