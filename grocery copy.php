@@ -203,16 +203,17 @@
         }
         .slide {
             min-width: 100%;
-            height: auto;
-            aspect-ratio: 16/9;
-            background: #eee center/contain no-repeat;
+            height: 165px; /* keep fixed height, or remove for auto */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #eee;
         }
         .slide img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain; /* or cover */
+        width: 100%;
+        height: 100%;
+        object-fit: contain; /* full image visible */
         }
-
         .carousel-btn {
             position: absolute;
             top: 50%;
@@ -451,11 +452,6 @@
 
     <meta name="description" content="Online Grocery Store - Desktop View">
     <meta name="color-scheme" content="light">
-    <img src="assets/grocery_banner 5.png" alt="Grocery Banner 5">
-    <img src="assets/grocery_banner 3.png" alt="Grocery Banner 3">
-    <img src="assets/grocery_banner 4.png" alt="Grocery Banner 4">
-    <img src="assets/grocery_banner 1.png" alt="Grocery Banner 1">
-    <img src="assets/grocery_banner 2.png" alt="Grocery Banner 2">
     <style>
         .toast { position: fixed; top: 20px; right: 20px; background: #252F3D; color: #fff; padding: 12px 16px; border-radius: 8px; box-shadow: 0 4px 14px rgba(0,0,0,0.35); transform: translateX(120%); transition: transform .3s ease; z-index: 1000; }
         .toast.show { transform: translateX(0); }
@@ -525,19 +521,16 @@
     <!-- Promo banners -->
     <section class="promo container">
         <div id="slides" class="slides">
-            <div class="slide" style="background-image:url('assets/grocery_banner_5-31f79d.png');"></div>
-            <div class="slide" style="background-image:url('assets/grocery_banner_3-30d908.png');"></div>
-            <div class="slide" style="background-image:url('assets/grocery_banner_4-156c44.png');"></div>
-            <div class="slide" style="background-image:url('assets/grocery_banner_1.png');"></div>
-            <div class="slide" style="background-image:url('assets/grocery_banner_2.png');"></div>
+            <div class="slide"><img src="assets/grocery_banner_5-31f79d.png" alt="Banner 1"></div>
+            <div class="slide"><img src="assets/grocery_banner_3-30d908.png" alt="Banner 2"></div>
+            <div class="slide"><img src="assets/grocery_banner_4-156c44.png" alt="Banner 3"></div>
+            <div class="slide"><img src="assets/grocery_banner_1.png" alt="Banner 4"></div>
+            <div class="slide"><img src="assets/grocery_banner_2.png" alt="Banner 5"></div>
         </div>
-        <div class="carousel-btn left" id="btnPrev" aria-label="Previous">
-            <i class="material-icons">chevron_left</i>
-        </div>
-        <div class="carousel-btn right" id="btnNext" aria-label="Next">
-            <i class="material-icons">chevron_right</i>
-        </div>
+        <div class="carousel-btn left" id="btnPrev" aria-label="Previous">◀</div>
+        <div class="carousel-btn right" id="btnNext" aria-label="Next">▶</div>
     </section>
+
 
     <!-- Categories -->
     <section class="cats container" id="cats">
