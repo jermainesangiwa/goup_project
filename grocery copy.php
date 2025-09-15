@@ -445,11 +445,11 @@
 
     <meta name="description" content="Online Grocery Store - Desktop View">
     <meta name="color-scheme" content="light">
-    <link rel="preload" href="assets/grocery_banner_5-31f79d.png" as="image">
-    <link rel="preload" href="assets/grocery_banner_3-30d908.png" as="image">
-    <link rel="preload" href="assets/grocery_banner_4-156c44.png" as="image">
-    <link rel="preload" href="assets/grocery_banner_1.png" as="image">
-    <link rel="preload" href="assets/grocery_banner_2.png" as="image">
+    <link rel="preload" href="assets/grocery_banner 5.png" as="image">
+    <link rel="preload" href="assets/grocery_banner 3.png" as="image">
+    <link rel="preload" href="assets/grocery_banner 4.png" as="image">
+    <link rel="preload" href="assets/grocery_banner 1.png" as="image">
+    <link rel="preload" href="assets/grocery_banner 2.png" as="image">
     <style>
         .toast { position: fixed; top: 20px; right: 20px; background: #252F3D; color: #fff; padding: 12px 16px; border-radius: 8px; box-shadow: 0 4px 14px rgba(0,0,0,0.35); transform: translateX(120%); transition: transform .3s ease; z-index: 1000; }
         .toast.show { transform: translateX(0); }
