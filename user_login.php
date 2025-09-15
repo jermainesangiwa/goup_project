@@ -17,18 +17,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $error = "Invalid email format.";
     }
 
-    $stmt = $conn->prepare("SELECT user_id, email, password_hash FROM Users WHERE email = ?");
+    $stmt = $conn->prepare("SELECT user_id, email, password_hash, first_name FROM Users WHERE email = ?");
     $stmt->bind_param("s", $input);
     $stmt->execute();
     $stmt->store_result();
 
     if ($stmt->num_rows === 1) {
-        $stmt->bind_result($user_id, $email, $hashed_password);
+        $stmt->bind_result($user_id, $email, $hashed_password, $first_name);
         $stmt->fetch();
 
         if (password_verify($password, $hashed_password)) {
             $_SESSION['user_id'] = $user_id;
             $_SESSION['email'] = $email;
+            $_SESSION['first_name'] = $first_name; // <-- Add this line
             header("Location: Homepage.php");
             exit();
         } else {
