@@ -204,7 +204,8 @@
         .slide {
             min-width: 100%;
             height: auto;
-            background: #eee center/cover no-repeat;
+            aspect-ratio: 16/9;
+            background: #eee center/contain no-repeat;
         }
         .carousel-btn {
             position: absolute;
