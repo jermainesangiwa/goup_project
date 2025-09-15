@@ -203,7 +203,7 @@
         }
         .slide {
             min-width: 100%;
-            height: 165px; /* keep fixed height, or remove for auto */
+            height: auto; /* keep fixed height, or remove for auto */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -211,7 +211,7 @@
         }
         .slide img {
         width: 100%;
-        height: 100%;
+        height: auto;
         object-fit: contain; /* full image visible */
         }
         .carousel-btn {
