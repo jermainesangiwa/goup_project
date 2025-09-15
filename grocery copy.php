@@ -521,11 +521,11 @@
     <!-- Promo banners -->
     <section class="promo container">
         <div id="slides" class="slides">
-            <div class="slide"><img src="assets/grocery_banner_5-31f79d.png" alt="Banner 1"></div>
-            <div class="slide"><img src="assets/grocery_banner_3-30d908.png" alt="Banner 2"></div>
-            <div class="slide"><img src="assets/grocery_banner_4-156c44.png" alt="Banner 3"></div>
-            <div class="slide"><img src="assets/grocery_banner_1.png" alt="Banner 4"></div>
-            <div class="slide"><img src="assets/grocery_banner_2.png" alt="Banner 5"></div>
+            <div class="slide"><img src="assets/grocery_banner 5.png" alt="Banner 1"></div>
+            <div class="slide"><img src="assets/grocery_banner 3.png" alt="Banner 2"></div>
+            <div class="slide"><img src="assets/grocery_banner 4.png" alt="Banner 3"></div>
+            <div class="slide"><img src="assets/grocery_banner 1.png" alt="Banner 4"></div>
+            <div class="slide"><img src="assets/grocery_banner 2.png" alt="Banner 5"></div>
         </div>
         <div class="carousel-btn left" id="btnPrev" aria-label="Previous">◀</div>
         <div class="carousel-btn right" id="btnNext" aria-label="Next">▶</div>
