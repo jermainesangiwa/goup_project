@@ -1,3 +1,8 @@
+<?php
+    session_start();
+    include("config.php");
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,7 +35,7 @@
         .search-btn .lens::after { content: ''; position: absolute; right: -8px; bottom: -6px; width: 10px; height: 3px; background: #fff; transform: rotate(45deg); border-radius: 2px; }
 
         /* Cart */
-        .cart-wrap { display: flex; align-items: center; justify-content: flex-end; gap: 12px; color: #fff; cursor: pointer; }
+        .cart-wrap { display: flex; align-items: center; justify-content: flex-end; gap: 12px; color: #fff; }
         .cart-icon { position: relative; width: 36px; height: 36px; border: 2px solid #fff; border-radius: 6px; }
         .cart-badge { position: absolute; right: -6px; top: -6px; width: 16px; height: 16px; background: #BA0B34; color: #fff; font-size: 12px; font-weight: 700; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
         .cart-text { font-weight: 700; font-size: 24px; }
@@ -58,12 +63,11 @@
         .carousel-btn.right { right: 10px; }
 
         /* Categories strip */
-        .cats { width: 100%; height: 154px; background: rgba(217,217,217,0.65); display: flex; align-items: center; justify-content: center; gap: 40px; padding: 0 24px; position: relative; }
-        .cat-card { width: 128px; height: 115px; display: flex; flex-direction: column; align-items: center; text-align: center; cursor: pointer; position: relative; }
-        .cat-card .img { width: 100px; height: 100px; border-radius: 12px; background: #d9d9d9 center/cover no-repeat; margin-bottom: 15px; }
+        .cats { width: 100%; height: 148px; display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; align-items: end; padding: 0 24px; }
+        .cat-card { justify-self: center; width: 128px; height: 115px; display: grid; grid-template-rows: 100px 15px; gap: 0; align-items: center; text-align: center; cursor: pointer; }
+        .cat-card .img { width: 100px; height: 100px; margin: 0 auto; border-radius: 12px; background: #d9d9d9 center/cover no-repeat; }
         .cat-card .label { font-weight: 700; font-size: 20px; color: #000; }
-        .cat-card.active .label { color: #000; }
-        .cat-card.active::before { content: ''; position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 166px; height: 154px; background: rgba(0,0,0,0.68); border-radius: 50%; z-index: -1; }
+        .cat-card.active .label { text-decoration: underline; }
 
         /* Section title */
         .section-title { font-weight: 700; font-size: 20px; margin: 24px; }
@@ -129,14 +133,29 @@
                     <div class="search-btn"><span class="lens" aria-hidden="true"></span></div>
                 </div>
             </div>
-            <div class="cart-wrap" onclick="openCart()">
+            <div class="cart-wrap">
                 <div class="cart-icon" aria-hidden="true">
                     <span id="cartBadge" class="cart-badge">0</span>
                 </div>
                 <div class="cart-text">Cart</div>
             </div>
+
+            <!-- Auth / Profile -->
             <div class="auth">
-                <a href="#">Login/sign up · Account</a>
+                <?php if (isset($_SESSION['user_id']) && isset($_SESSION['first_name'])): ?>
+                    <span style="color:#fff;font-weight:700;font-size:16px;">
+                        <i class="material-icons">account_circle</i>
+                        Hello, <?php echo htmlspecialchars($_SESSION['first_name']); ?>
+                    </span>
+                    <a href="logout.php" style="margin-left:15px;color:#fff;font-size:14px;">
+                        <i class="material-icons" style="vertical-align:middle;font-size:18px;">logout</i> Logout
+                    </a>
+                <?php else: ?>
+                    <a href="user_login.php">
+                        <i class="material-icons" style="vertical-align:middle;">login</i>
+                        Login/sign up · Account
+                    </a>
+                <?php endif; ?>
             </div>
         </div>
     </header>
@@ -166,25 +185,24 @@
 
     <!-- Categories (Fruits, Drinks, snacks, Stationary) -->
     <section class="cats container" id="cats">
-        <div class="cat-card" data-cat="fruits" onclick="navigateToCategory('fruits')">
+        <div class="cat-card active" data-cat="all">
             <div class="img" style="background-image:url('assets/cat_fruits.png');"></div>
             <div class="label">Fruits</div>
         </div>
-        <div class="cat-card" data-cat="snacks-drinks" onclick="navigateToCategory('snacks-drinks')">
+        <div class="cat-card" data-cat="drinks">
             <div class="img" style="background-image:url('assets/cat_drinks.png');"></div>
-            <div class="label">Snacks & Drinks</div>
+            <div class="label">Drinks</div>
         </div>
-        <div class="cat-card active" data-cat="stationary" onclick="navigateToCategory('stationary')">
-            <div class="img" style="background-image:url('assets/cat_stationary.png');"></div>
+        <div class="cat-card" data-cat="snacks">
+            <div class="img" style="background-image:url('assets/cat_snacks.png');"></div>
+            <div class="label">snacks</div>
+        </div>
+        <div class="cat-card" data-cat="stationary">
             <div class="label">Stationary</div>
-        </div>
-        <div class="cat-card" data-cat="pharmacy" onclick="navigateToCategory('pharmacy')">
-            <div class="img" style="background-image:url('assets/cat_pharmacy.png');"></div>
-            <div class="label">Pharmacy</div>
         </div>
     </section>
 
-    <h3 class="section-title container">Best of Stationary</h3>
+    <h3 class="section-title container">Best of Snacks</h3>
 
     <section class="grid container" id="grid">
         <!-- Cards: names and prices per Figma labels/colors -->
@@ -223,35 +241,33 @@
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
     <script>
-        // Data mapped from Figma design - Stationary products
+        // Data mapped from Figma labels (subset for demo, can be extended)
         const PRODUCTS = [
-            { name: 'Ruler', price: 1.20, img: 'assets/stationary_ruler.png', cat: 'stationary' },
-            { name: 'Tape', price: 1.00, img: 'assets/stationary_tape.png', cat: 'stationary' },
-            { name: 'Marker', price: 1.20, img: 'assets/stationary_marker.png', cat: 'stationary' },
-            { name: 'Pencil', price: 1.50, img: 'assets/stationary_pencil.png', cat: 'stationary' },
-            { name: 'Paper glue', price: 1.50, img: 'assets/stationary_glue.png', cat: 'stationary' },
-            { name: 'Note slip', price: 1.50, img: 'assets/stationary_notes.png', cat: 'stationary' },
-            { name: 'Pen', price: 1.50, img: 'assets/stationary_pen.png', cat: 'stationary' },
-            { name: 'Sharpener', price: 1.50, img: 'assets/stationary_sharpener.png', cat: 'stationary' },
-            { name: 'Caliper', price: 1.50, img: 'assets/stationary_caliper.png', cat: 'stationary' },
-            { name: 'Eraser', price: 1.50, img: 'assets/stationary_eraser.png', cat: 'stationary' },
-            { name: 'File', price: 1.50, img: 'assets/stationary_file.png', cat: 'stationary' },
-            { name: 'Calculator', price: 1.50, img: 'assets/stationary_calculator.png', cat: 'stationary' },
-            { name: 'Paper', price: 1.50, img: 'assets/stationary_paper.png', cat: 'stationary' },
-            { name: 'Organiser', price: 1.50, img: 'assets/stationary_organiser.png', cat: 'stationary' },
-            { name: 'Highlighter', price: 1.50, img: 'assets/stationary_highlighter.png', cat: 'stationary' },
-            { name: 'Books', price: 1.50, img: 'assets/stationary_books.png', cat: 'stationary' },
-            { name: 'Pen holder', price: 1.50, img: 'assets/stationary_penholder.png', cat: 'stationary' },
-            { name: 'Case bag', price: 1.50, img: 'assets/stationary_casebag.png', cat: 'stationary' },
+            { name: 'Fanta', price: 1.20, img: 'assets/card_img_2.png', cat: 'drinks' },
+            { name: 'Coca cola', price: 1.50, img: 'assets/card_img_6.png', cat: 'drinks' },
+            { name: 'Coca cola', price: 1.50, img: 'assets/card_img_5.png', cat: 'drinks' },
+            { name: 'Litchi', price: 1.20, img: 'assets/card_img_3.png', cat: 'drinks' },
+            { name: 'Fanta', price: 1.20, img: 'assets/card_img_1.png', cat: 'drinks' },
+            { name: 'Cheetos', price: 1.50, img: 'assets/card_img_9.png', cat: 'snacks' },
+            { name: 'Pringles', price: 1.50, img: 'assets/card_img_12.png', cat: 'snacks' },
+            { name: 'Sprite', price: 1.50, img: 'assets/card_img_7.png', cat: 'drinks' },
+            { name: 'Splush', price: 1.50, img: 'assets/card_img_11.png', cat: 'drinks' },
+            { name: 'Storia', price: 1.50, img: 'assets/card_img_10.png', cat: 'drinks' },
+            { name: 'Monster', price: 1.50, img: 'assets/card_img_14.png', cat: 'drinks' },
+            { name: 'Monster', price: 1.50, img: 'assets/card_img_16.png', cat: 'drinks' },
+            { name: 'Monster', price: 1.50, img: 'assets/card_img_18.png', cat: 'drinks' },
+            { name: 'Real fruit orange', price: 1.50, img: 'assets/card_img_13.png', cat: 'drinks' },
+            { name: 'M.Maid', price: 1.50, img: 'assets/card_img_17.png', cat: 'drinks' },
+            { name: 'Welch’s', price: 1.50, img: 'assets/card_img_15.png', cat: 'drinks' },
+            { name: 'Raw', price: 1.50, img: 'assets/card_img_8.png', cat: 'drinks' },
         ];
 
         const grid = document.getElementById('grid');
         const searchInput = document.getElementById('searchInput');
         const cartBadge = document.getElementById('cartBadge');
         const toast = document.getElementById('toast');
-        let cart = JSON.parse(localStorage.getItem('groceryCart')) || [];
-        let cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
-        let currentFilter = 'stationary';
+        let cartCount = 0;
+        let currentFilter = 'all';
 
         function renderProducts() {
             grid.innerHTML = '';
@@ -278,7 +294,11 @@
             add.className = 'add';
             add.type = 'button';
             add.textContent = 'Add to cart';
-            add.addEventListener('click', () => addToCart(p));
+            add.addEventListener('click', () => {
+                cartCount += 1;
+                cartBadge.textContent = String(cartCount);
+                showToast(`${p.name} added to cart`);
+            });
             meta.appendChild(name);
             meta.appendChild(price);
             el.appendChild(thumb);
@@ -294,39 +314,6 @@
             toast.classList.add('show');
             clearTimeout(showToast._t);
             showToast._t = setTimeout(() => toast.classList.remove('show'), 2200);
-        }
-
-        function updateCartBadge() {
-            cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
-            cartBadge.textContent = cartCount;
-        }
-
-        function addToCart(product) {
-            const existingItem = cart.find(item => item.name === product.name);
-            if (existingItem) {
-                existingItem.quantity += 1;
-            } else {
-                cart.push({ ...product, quantity: 1 });
-            }
-            localStorage.setItem('groceryCart', JSON.stringify(cart));
-            updateCartBadge();
-            showToast(`${product.name} added to cart`);
-        }
-
-        function openCart() {
-            window.open('cart.html', '_blank');
-        }
-
-        function navigateToCategory(category) {
-            const pages = {
-                'fruits': 'grocery-fruits.html',
-                'snacks-drinks': 'grocery-main.html',
-                'stationary': 'grocery-stationary.html',
-                'pharmacy': 'grocery-pharmacy.html'
-            };
-            if (pages[category]) {
-                window.location.href = pages[category];
-            }
         }
 
         // Search
@@ -365,7 +352,6 @@
         document.getElementById('backTop').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
         // Initial render
-        updateCartBadge();
         renderProducts();
     </script>
 </body>
