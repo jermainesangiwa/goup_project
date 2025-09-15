@@ -1,3 +1,7 @@
+<?php 
+        session_start();
+        include ('config.php'); 
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -482,10 +486,6 @@
     </style>
 </head>
 <body>
-    <?php 
-        session_start();
-        include ('config.php'); 
-    ?>
     <header class="topbar">
         <div class="container topbar-content">
             <div class="location">
