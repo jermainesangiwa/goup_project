@@ -199,10 +199,11 @@
         .slides {
             display: flex;
             transition: transform 0.5s ease;
+            object-fit: cover;
         }
         .slide {
             min-width: 100%;
-            height: 165px;
+            height: auto;
             background: #eee center/cover no-repeat;
         }
         .carousel-btn {
