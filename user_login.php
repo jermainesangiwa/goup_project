@@ -3,7 +3,7 @@ session_start();
 include("config.php");
 
 if (isset($_SESSION['user_id'])) {
-    header("Location: Homepage.php");
+    header("Location: grocery-main copy.php");
     exit();
 }
 
@@ -30,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['user_id'] = $user_id;
             $_SESSION['email'] = $email;
             $_SESSION['first_name'] = $first_name; // <-- Add this line
-            header("Location: Homepage.php");
+            header("Location: grocery-main copy.php");
             exit();
         } else {
             $error = "Invalid email or password.";
