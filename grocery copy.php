@@ -15,42 +15,34 @@
         body { font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif; color: #000; background: #fff; }
         a { color: inherit; text-decoration: none; }
 
-        /* Top header (Rectangle 2) */
+        /* Top header */
         .topbar { position: sticky; top: 0; z-index: 50; width: 100%; height: 83px; background: rgba(0,0,0,0.68); display: flex; align-items: center; }
         .container { width: 100%; max-width: 1440px; margin: 0 auto; padding: 0 24px; }
         .topbar-content { display: grid; grid-template-columns: 220px 1fr 280px 180px; align-items: center; gap: 16px; }
 
         /* Location */
         .location { display: flex; align-items: center; gap: 12px; color: #fff; }
-        .location-icon { width: 24px; height: 24px; border: 2px solid #fff; border-radius: 50%; position: relative; }
-        .location-icon::after { content: ''; position: absolute; left: 50%; top: 50%; width: 8px; height: 12px; border: 2px solid #fff; border-top: none; border-left: none; transform: translate(-50%,-35%) rotate(45deg); border-radius: 2px; }
         .location-text { font-weight: 700; font-size: 14px; letter-spacing: 0.01em; }
 
-        /* Search bar (603.69 x 40, radius 50) */
+        /* Search bar */
         .search-wrap { display: flex; align-items: center; justify-content: center; }
         .search { width: 100%; max-width: 604px; height: 40px; background: rgba(217,217,217,0.62); border: 1px solid rgba(0,0,0,0.37); border-radius: 50px; display: grid; grid-template-columns: 1fr 48px; overflow: hidden; }
         .search input { border: none; background: transparent; padding: 0 20px; color: #000; font-size: 18px; outline: none; }
         .search-btn { display: flex; align-items: center; justify-content: center; color: #fff; }
-        .search-btn .lens { width: 22px; height: 22px; border: 3px solid #fff; border-radius: 50%; position: relative; opacity: 0.9; }
-        .search-btn .lens::after { content: ''; position: absolute; right: -8px; bottom: -6px; width: 10px; height: 3px; background: #fff; transform: rotate(45deg); border-radius: 2px; }
 
         /* Cart */
         .cart-wrap { display: flex; align-items: center; justify-content: flex-end; gap: 12px; color: #fff; }
-        .cart-icon { position: relative; width: 36px; height: 36px; border: 2px solid #fff; border-radius: 6px; }
         .cart-badge { position: absolute; right: -6px; top: -6px; width: 16px; height: 16px; background: #BA0B34; color: #fff; font-size: 12px; font-weight: 700; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
         .cart-text { font-weight: 700; font-size: 24px; }
+        .cart-icon { position: relative; display: inline-flex; align-items: center; }
 
-        /* Sign up bar */
+        /* Auth */
         .auth { display: flex; justify-content: flex-end; }
         .auth a { color: #fff; font-weight: 700; font-size: 16px; }
 
-        /* Section bar (nav) */
+        /* Section bar */
         .sectionbar { width: 100%; background: #252F3D; height: 40px; display: flex; align-items: center; }
         .sectionbar-inner { display: flex; align-items: center; gap: 28px; color: #fff; }
-        .menu-icon { width: 24px; height: 24px; border: 2px solid #fff; border-radius: 4px; position: relative; }
-        .menu-icon::before, .menu-icon::after { content: ''; position: absolute; left: 4px; right: 4px; height: 2px; background: #fff; }
-        .menu-icon::before { top: 7px; }
-        .menu-icon::after { bottom: 7px; }
         .nav-link { font-weight: 500; font-size: 16px; opacity: 0.95; cursor: pointer; }
         .nav-link.active { text-decoration: underline; text-underline-offset: 4px; }
 
@@ -62,17 +54,16 @@
         .carousel-btn.left { left: 10px; }
         .carousel-btn.right { right: 10px; }
 
-        /* Categories strip */
+        /* Categories */
         .cats { width: 100%; height: 148px; display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; align-items: end; padding: 0 24px; }
-        .cat-card { justify-self: center; width: 128px; height: 115px; display: grid; grid-template-rows: 100px 15px; gap: 0; align-items: center; text-align: center; cursor: pointer; }
-        .cat-card .img { width: 100px; height: 100px; margin: 0 auto; border-radius: 12px; background: #d9d9d9 center/cover no-repeat; }
+        .cat-card { justify-self: center; width: 128px; height: 115px; display: grid; grid-template-rows: 1fr 20px; gap: 4px; align-items: center; text-align: center; cursor: pointer; }
         .cat-card .label { font-weight: 700; font-size: 20px; color: #000; }
         .cat-card.active .label { text-decoration: underline; }
 
         /* Section title */
         .section-title { font-weight: 700; font-size: 20px; margin: 24px; }
 
-        /* Product grid (200x200 cards) */
+        /* Product grid */
         .grid { display: grid; grid-template-columns: repeat(6, 200px); gap: 24px; padding: 0 24px 40px; justify-content: start; }
         .card { width: 200px; border-radius: 10px; background: #d9d9d9; overflow: hidden; position: relative; }
         .card .thumb { width: 100%; height: 200px; background: #ccc center/cover no-repeat; }
@@ -82,7 +73,7 @@
         .card .add { position: absolute; left: 10px; bottom: 10px; height: 30px; padding: 0 12px 0 36px; border-radius: 100px; background: #F9A41E; color: #000; font-weight: 700; font-size: 16px; display: inline-flex; align-items: center; cursor: pointer; border: none; }
         .card .add::before { content: '+'; position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 22px; height: 22px; border-radius: 999px; background: rgba(0,0,0,0.15); display: grid; place-items: center; font-size: 16px; font-weight: 700; }
 
-        /* Footer area */
+        /* Footer */
         .footer { margin-top: 24px; background: #1A1A1A; color: #fff; }
         .back-top { text-align: center; padding: 16px; font-weight: 700; font-size: 24px; cursor: pointer; }
         .footer-inner { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; max-width: 1440px; margin: 0 auto; padding: 40px 24px; }
@@ -107,6 +98,7 @@
             .card { width: 100%; max-width: 220px; }
         }
     </style>
+
     <meta name="description" content="Online Grocery Store - Desktop View">
     <meta name="color-scheme" content="light">
     <link rel="preload" href="assets/grocery_banner_5-31f79d.png" as="image">
