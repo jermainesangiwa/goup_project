@@ -58,7 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         body {
             font-family: Arial, Helvetica, sans-serif;
-            background: url('Background_Image_1.png') repeat;
+            background: url('assets/Background_Image_1.png') repeat;
             background-size: 400px auto; /* adjust tile size */
             animation: scrollUp 30s linear infinite;
             color: #ffffff;
