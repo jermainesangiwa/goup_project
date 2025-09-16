@@ -45,7 +45,7 @@
     .promo { width: 100%; max-width: 1463px; margin: 24px auto; position: relative; overflow: hidden; border-radius: 8px; }
     .slides { display: flex; transition: transform 0.5s ease; }
     .slide { min-width: 100%; height: 278px; display: flex; justify-content: center; align-items: center; background: #eee; }
-    .slide img { width: 100%; height: 100%; object-fit: contain; }
+    .slide img { width: 100%; height: 100%; object-fit: cover; }
     .carousel-btn { position: absolute; top: 50%; transform: translateY(-50%); width: 50px; height: 50px; border: 2px solid #fff; color: #fff; border-radius: 50%; background: rgba(0,0,0,0.35); display: flex; align-items: center; justify-content: center; cursor: pointer; }
     .carousel-btn.left { left: 10px; }
     .carousel-btn.right { right: 10px; }
