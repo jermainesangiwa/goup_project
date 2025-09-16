@@ -531,33 +531,26 @@
         <div class="carousel-btn right" id="btnNext" aria-label="Next">▶</div>
     </section>
 
-
     <!-- Categories -->
     <section class="cats container" id="cats">
-        <div class="cat-card active" data-cat="all">
-            <i class="material-icons" style="font-size:40px;color:#2b7a78;">local_grocery_store</i>
-            <div class="label"><a href="#">All</a></div>
-        </div>
-        <div class="cat-card" data-cat="food">
-            <i class="material-icons" style="font-size:40px;color:#2b7a78;">restaurant</i>
-            <div class="label"><a href="#">Food & Fruits</a></div>
-        </div>
-        <div class="cat-card" data-cat="snacks">
-            <i class="material-icons" style="font-size:40px;color:#2b7a78;">fastfood</i>
-            <div class="label"><a href="grocery s&d.php">Snacks & Drinks</a></div>
-        </div>
-        <div class="cat-card" data-cat="pharmacy">
-            <i class="material-icons" style="font-size:40px;color:#2b7a78;">local_pharmacy</i>
-            <div class="label"><a href="#">Pharmacy</a></div>
-        </div>
-        <div class="cat-card" data-cat="stationary">
+    <div class="cat-card" onclick="window.location.href='grocery fruits.php'">
+            <i class="material-icons" style="font-size:40px;color:#2b7a78;">emoji_food_beverage</i>
+            <div class="label">Fruits</div>
+    </div>
+    <div class="cat-card active" onclick="window.location.href='grocery s&d.php'">
+            <i class="material-icons" style="font-size:40px;color:#2b7a78;">local_drink</i>
+            <div class="label">Snacks & Drinks</div>
+    </div>
+    <div class="cat-card" onclick="window.location.href='grocery stationary.php'">
             <i class="material-icons" style="font-size:40px;color:#2b7a78;">edit</i>
-            <div class="label"><a href="#">Stationaries</a></div>
-        </div>
+            <div class="label">Stationary</div>
+    </div>
+    <div class="cat-card" onclick="window.location.href='grocery pharmacy.php'">
+            <i class="material-icons" style="font-size:40px;color:#2b7a78;">medical_services</i>
+            <div class="label">Pharmacy</div>
+    </div>
     </section>
-
     <h3 class="section-title container">Best of Snacks</h3>
-
     <section class="grid container" id="grid"></section>
 
     <!-- Footer -->
