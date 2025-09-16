@@ -212,7 +212,7 @@
         .slide img {
         width: 100%;
         height: 278px;
-        object-fit: contain; /* full image visible */
+        object-fit: cover; /* full image visible */
         }
         .carousel-btn {
             position: absolute;
