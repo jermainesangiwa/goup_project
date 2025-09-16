@@ -203,7 +203,7 @@
         }
         .slide {
             min-width: 100%;
-            height: auto; /* keep fixed height, or remove for auto */
+            height: 165px; /* keep fixed height, or remove for auto */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -211,7 +211,7 @@
         }
         .slide img {
         width: 100%;
-        height: auto;
+        height: 165px;
         object-fit: contain; /* full image visible */
         }
         .carousel-btn {
@@ -536,23 +536,23 @@
     <section class="cats container" id="cats">
         <div class="cat-card active" data-cat="all">
             <i class="material-icons" style="font-size:40px;color:#2b7a78;">local_grocery_store</i>
-            <div class="label">All</div>
+            <div class="label"><a href="#">All</a></div>
         </div>
         <div class="cat-card" data-cat="food">
             <i class="material-icons" style="font-size:40px;color:#2b7a78;">restaurant</i>
-            <div class="label">Food & Fruits</div>
+            <div class="label"><a href="#">Food & Fruits</a></div>
         </div>
         <div class="cat-card" data-cat="snacks">
             <i class="material-icons" style="font-size:40px;color:#2b7a78;">fastfood</i>
-            <div class="label">Snacks & Drinks</div>
+            <div class="label"><a href="#">Snacks & Drinks</a></div>
         </div>
         <div class="cat-card" data-cat="pharmacy">
             <i class="material-icons" style="font-size:40px;color:#2b7a78;">local_pharmacy</i>
-            <div class="label">Pharmacy</div>
+            <div class="label"><a href="#">Pharmacy</a></div>
         </div>
         <div class="cat-card" data-cat="stationary">
             <i class="material-icons" style="font-size:40px;color:#2b7a78;">edit</i>
-            <div class="label">Stationaries</div>
+            <div class="label"><a href="#">Stationaries</a></div>
         </div>
     </section>
 
