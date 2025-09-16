@@ -533,7 +533,7 @@
 
     <!-- Categories -->
     <section class="cats container" id="cats">
-    <div class="cat-card active" onclick="window.location.href='grocery fruits.php'">
+    <div class="cat-card active" onclick="window.location.href='grocery food&drink.php'">
             <i class="material-icons" style="font-size:40px;color:#2b7a78;">emoji_food_beverage</i>
             <div class="label">Fruits</div>
     </div>
