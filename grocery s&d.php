@@ -44,7 +44,7 @@
     /* Promo Banner */
     .promo { width: 100%; max-width: 1463px; margin: 24px auto; position: relative; overflow: hidden; border-radius: 8px; }
     .slides { display: flex; transition: transform 0.5s ease; }
-    .slide { min-width: 100%; height: 165px; display: flex; justify-content: center; align-items: center; background: #eee; }
+    .slide { min-width: 100%; height: 278px; display: flex; justify-content: center; align-items: center; background: #eee; }
     .slide img { width: 100%; height: 100%; object-fit: contain; }
     .carousel-btn { position: absolute; top: 50%; transform: translateY(-50%); width: 50px; height: 50px; border: 2px solid #fff; color: #fff; border-radius: 50%; background: rgba(0,0,0,0.35); display: flex; align-items: center; justify-content: center; cursor: pointer; }
     .carousel-btn.left { left: 10px; }
@@ -154,11 +154,11 @@
   <!-- Promo -->
   <section class="promo container">
     <div id="slides" class="slides">
-      <div class="slide"><img src="assets/grocery_banner_5-31f79d.png" alt="Banner 1"></div>
-      <div class="slide"><img src="assets/grocery_banner_3-30d908.png" alt="Banner 2"></div>
-      <div class="slide"><img src="assets/grocery_banner_4-156c44.png" alt="Banner 3"></div>
-      <div class="slide"><img src="assets/grocery_banner_1.png" alt="Banner 4"></div>
-      <div class="slide"><img src="assets/grocery_banner_2.png" alt="Banner 5"></div>
+      <div class="slide"><img src="assets/grocery_banner 5" alt="Banner 1"></div>
+      <div class="slide"><img src="assets/grocery_banner 3" alt="Banner 2"></div>
+      <div class="slide"><img src="assets/grocery_banner 4" alt="Banner 3"></div>
+      <div class="slide"><img src="assets/grocery_banner 1" alt="Banner 4"></div>
+      <div class="slide"><img src="assets/grocery_banner 2" alt="Banner 5"></div>
     </div>
     <div class="carousel-btn left" id="btnPrev" aria-label="Previous">◀</div>
     <div class="carousel-btn right" id="btnNext" aria-label="Next">▶</div>

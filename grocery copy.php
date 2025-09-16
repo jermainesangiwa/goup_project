@@ -203,7 +203,7 @@
         }
         .slide {
             min-width: 100%;
-            height: 165px; /* keep fixed height, or remove for auto */
+            height: 278px; /* keep fixed height, or remove for auto */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -211,7 +211,7 @@
         }
         .slide img {
         width: 100%;
-        height: 165px;
+        height: 278px;
         object-fit: contain; /* full image visible */
         }
         .carousel-btn {
@@ -550,7 +550,7 @@
             <div class="label">Pharmacy</div>
     </div>
     </section>
-    
+
     <h3 class="section-title container">Best of Snacks</h3>
     <section class="grid container" id="grid"></section>
 
