@@ -544,7 +544,7 @@
         </div>
         <div class="cat-card" data-cat="snacks">
             <i class="material-icons" style="font-size:40px;color:#2b7a78;">fastfood</i>
-            <div class="label"><a href="#">Snacks & Drinks</a></div>
+            <div class="label"><a href="grocery s&d.php">Snacks & Drinks</a></div>
         </div>
         <div class="cat-card" data-cat="pharmacy">
             <i class="material-icons" style="font-size:40px;color:#2b7a78;">local_pharmacy</i>
