@@ -1,3 +1,13 @@
+<?php
+// Start the session
+session_start();
+
+// Connect to the database via config.php
+include("config.php");
+
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
