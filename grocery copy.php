@@ -533,11 +533,11 @@
 
     <!-- Categories -->
     <section class="cats container" id="cats">
-    <div class="cat-card" onclick="window.location.href='grocery fruits.php'">
+    <div class="cat-card active" onclick="window.location.href='grocery fruits.php'">
             <i class="material-icons" style="font-size:40px;color:#2b7a78;">emoji_food_beverage</i>
             <div class="label">Fruits</div>
     </div>
-    <div class="cat-card active" onclick="window.location.href='grocery s&d.php'">
+    <div class="cat-card" onclick="window.location.href='grocery s&d.php'">
             <i class="material-icons" style="font-size:40px;color:#2b7a78;">local_drink</i>
             <div class="label">Snacks & Drinks</div>
     </div>
@@ -550,6 +550,7 @@
             <div class="label">Pharmacy</div>
     </div>
     </section>
+    
     <h3 class="section-title container">Best of Snacks</h3>
     <section class="grid container" id="grid"></section>
 
