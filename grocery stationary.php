@@ -1,7 +1,26 @@
-<?php 
+<?php
     session_start();
-    include ('config.php'); 
+    include("config.php"); // DB connection
+
+    // Fetch products from DB
+    $sql = "SELECT product_id, product_name, category, price, product_image FROM Products";
+    $result = $conn->query($sql);
+    
+    // Store results in JSON array
+    $products = [];
+    if ($result && $result->num_rows > 0){
+        while($row = $result->fetch_assoc()){
+            $products[] = [
+                "id" => $row['product_id'],
+                "name" => $row['product_name'],
+                "cat" => strtolower($row['category']), // Match my JS filter
+                "price" => (float)$row['price'],
+                "img" => $row['product_image'] // Store as path e.g. assets/xxx.png
+            ];
+        }
+    }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -99,7 +118,7 @@
     }
   </style>
 </head>
-<body>
+<body data-current-cat="stationary">
   <!-- Header -->
   <header class="topbar">
     <div class="container topbar-content">
@@ -166,23 +185,23 @@
   
   <!-- Categories -->
   <section class="cats container" id="cats">
-    <div class="cat-card" onclick="window.location.href='grocery food.php'">
+    <div class="cat-card" data-cat="food" onclick="window.location.href='grocery food.php'">
       <i class="material-icons" style="font-size:40px;color:#2b7a78;">restaurant</i>
       <div class="label">Food</div>
     </div>
-    <div class="cat-card" onclick="window.location.href='grocery fruits.php'">
+    <div class="cat-card" data-cat="fruits" onclick="window.location.href='grocery fruits.php'">
       <i class="material-icons" style="font-size:40px;color:#2b7a78;">fruit_emoji</i>
       <div class="label">Fruits</div>
     </div>
-    <div class="cat-card" onclick="window.location.href='grocery s&d.php'">
+    <div class="cat-card" data-cat="snacks-drinks" onclick="window.location.href='grocery s&d.php'">
       <i class="material-icons" style="font-size:40px;color:#2b7a78;">local_drink</i>
       <div class="label">Snacks & Drinks</div>
     </div>
-    <div class="cat-card active" onclick="window.location.href='grocery stationary.php'">
+    <div class="cat-card active" data-cat="stationary" onclick="window.location.href='grocery stationary.php'">
       <i class="material-icons" style="font-size:40px;color:#2b7a78;">edit</i>
       <div class="label">Stationary</div>
     </div>
-    <div class="cat-card" onclick="window.location.href='grocery essentials.php'">
+    <div class="cat-card" data-cat="essentials" onclick="window.location.href='grocery essentials.php'">
       <i class="material-icons" style="font-size:40px;color:#2b7a78;">umbrella</i>
       <div class="label">Essentials</div>
     </div>
@@ -204,123 +223,117 @@
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
   <script>
-    // --- Cart setup ---
-    let cart = JSON.parse(localStorage.getItem('groceryCart')) || [];
-    let cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+    // Data mapped from database
+    const PRODUCTS = <?php echo json_encode($products);?>;
 
-    // --- Stationary product list ---
-    const PRODUCTS = [
-      { name: 'Ruler', price: 1.20, img: 'assets/stationary_ruler.png', cat: 'stationary' },
-      { name: 'Tape', price: 1.00, img: 'assets/stationary_tape.png', cat: 'stationary' },
-      { name: 'Marker', price: 1.20, img: 'assets/stationary_marker.png', cat: 'stationary' },
-      { name: 'Pencil', price: 1.50, img: 'assets/stationary_pencil.png', cat: 'stationary' },
-      { name: 'Paper glue', price: 1.50, img: 'assets/stationary_glue.png', cat: 'stationary' },
-      { name: 'Note slip', price: 1.50, img: 'assets/stationary_notes.png', cat: 'stationary' },
-      { name: 'Pen', price: 1.50, img: 'assets/stationary_pen.png', cat: 'stationary' },
-      { name: 'Sharpener', price: 1.50, img: 'assets/stationary_sharpener.png', cat: 'stationary' },
-      { name: 'Caliper', price: 1.50, img: 'assets/stationary_caliper.png', cat: 'stationary' },
-      { name: 'Eraser', price: 1.50, img: 'assets/stationary_eraser.png', cat: 'stationary' },
-      { name: 'File', price: 1.50, img: 'assets/stationary_file.png', cat: 'stationary' },
-      { name: 'Calculator', price: 1.50, img: 'assets/stationary_calculator.png', cat: 'stationary' },
-      { name: 'Paper', price: 1.50, img: 'assets/stationary_paper.png', cat: 'stationary' },
-      { name: 'Stapler', price: 1.50, img: 'assets/stationary_stapler.png', cat: 'stationary' },
-      { name: 'Scissor', price: 1.50, img: 'assets/stationary_scissor.png', cat: 'stationary' },
-      { name: 'Highlighter', price: 1.50, img: 'assets/stationary_highlighter.png', cat: 'stationary' },
-    ];
-
-    // DOM elements
     const grid = document.getElementById('grid');
+    const searchInput = document.getElementById('searchInput');
     const cartBadge = document.getElementById('cartBadge');
     const toast = document.getElementById('toast');
-    const searchInput = document.getElementById('searchInput');
 
-    // Active filter
-    let currentFilter = 'stationary';
+    // Detect default filter from <body data-current-cat="">
+    let currentFilter = document.body.dataset.currentCat || 'all';
+    let cartCount = 0;
 
-    // Render products
     function renderProducts() {
-      grid.innerHTML = '';
-      const q = (searchInput?.value || '').toLowerCase();
-
-      PRODUCTS.filter(p =>
-        (currentFilter === 'all' || p.cat === currentFilter) &&
-        (!q || p.name.toLowerCase().includes(q))
-      ).forEach(p => {
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.innerHTML = `
-          <div class="thumb" style="background-image:url('${p.img}')"></div>
-          <div class="meta">
-            <div class="name">${p.name}</div>
-            <div class="price">$${p.price.toFixed(2)}</div>
-          </div>
-          <button class="add" onclick="addToCart('${p.name}')">Add</button>
-        `;
-        grid.appendChild(card);
-      });
+        grid.innerHTML = '';
+        const q = (searchInput.value || '').trim().toLowerCase();
+        PRODUCTS.filter(p =>
+            (currentFilter === 'all' || p.cat === currentFilter) &&
+            (!q || p.name.toLowerCase().includes(q))
+        ).forEach(p => grid.appendChild(cardEl(p)));
     }
 
-    // Add to cart
-    function addToCart(name) {
-      const item = cart.find(i => i.name === name);
-      if (item) item.quantity++;
-      else cart.push({ name, quantity: 1 });
+    function cardEl(p) {
+        const el = document.createElement('article');
+        el.className = 'card';
 
-      localStorage.setItem('groceryCart', JSON.stringify(cart));
-      cartCount++;
-      cartBadge.textContent = cartCount;
-      showToast(`${name} added to cart`);
+        const thumb = document.createElement('div');
+        thumb.className = 'thumb';
+        thumb.style.backgroundImage = `url('${p.img || ''}')`;
+
+        const meta = document.createElement('div');
+        meta.className = 'meta';
+
+        const name = document.createElement('div');
+        name.className = 'name';
+        name.textContent = p.name;
+
+        const price = document.createElement('div');
+        price.className = 'price';
+        price.textContent = "₹" + Number(p.price).toFixed(2);
+
+
+        const add = document.createElement('button');
+        add.className = 'add';
+        add.type = 'button';
+        add.textContent = 'Add to cart';
+        add.addEventListener('click', () => {
+            cartCount += 1;
+            cartBadge.textContent = String(cartCount);
+            showToast(`${p.name} added to cart`);
+        });
+
+        meta.appendChild(name);
+        meta.appendChild(price);
+        el.appendChild(thumb);
+        el.appendChild(meta);
+        el.appendChild(add);
+        return el;
     }
 
-    // Show toast
     function showToast(msg) {
-      toast.textContent = msg;
-      toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 2000);
+        toast.textContent = msg;
+        toast.classList.add('show');
+        clearTimeout(showToast._t);
+        showToast._t = setTimeout(() => toast.classList.remove('show'), 2200);
     }
 
-    // Cart placeholder
-    function openCart() {
-      alert('Cart functionality goes here.');
-    }
+    // Search
+    searchInput.addEventListener('input', renderProducts);
 
-    // Nav filters
-    document.querySelectorAll('.nav-link').forEach(link => {
-      link.addEventListener('click', () => {
-        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-        link.classList.add('active');
-        currentFilter = link.dataset.filter;
+    // Category chips
+    document.getElementById('cats').addEventListener('click', (e) => {
+        const card = e.target.closest('.cat-card');
+        if (!card) return;
+        document.querySelectorAll('.cat-card').forEach(c => c.classList.remove('active'));
+        card.classList.add('active');
+        currentFilter = card.dataset.cat || 'all';
         renderProducts();
-      });
     });
 
-    // Back to top
-    document.getElementById('backTop').addEventListener('click', () =>
-      window.scrollTo({ top: 0, behavior: 'smooth' })
-    );
+    // Highlight correct category card on page load
+    document.querySelectorAll('.cat-card').forEach(c => {
+        if (c.dataset.cat === currentFilter) {
+            c.classList.add('active');
+        } else {
+            c.classList.remove('active');
+        }
+    });
+
+    // Section bar quick filters
+    document.querySelectorAll('.nav-link').forEach(n => n.addEventListener('click', () => {
+        document.querySelectorAll('.nav-link').forEach(x => x.classList.remove('active'));
+        n.classList.add('active');
+    }));
 
     // Carousel
     const slides = document.getElementById('slides');
     const slideCount = slides.children.length;
     let slideIndex = 0;
-
     function go(i) {
-      slideIndex = (i + slideCount) % slideCount;
-      slides.style.transform = `translateX(-${slideIndex * 100}%)`;
+        slideIndex = (i + slideCount) % slideCount;
+        slides.style.transform = `translateX(-${slideIndex * 100}%)`;
     }
-
     document.getElementById('btnPrev').addEventListener('click', () => go(slideIndex - 1));
     document.getElementById('btnNext').addEventListener('click', () => go(slideIndex + 1));
     setInterval(() => go(slideIndex + 1), 5000);
 
-    // Search
-    if (searchInput) {
-      searchInput.addEventListener('input', renderProducts);
-    }
+    // Back to top
+    document.getElementById('backTop').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
-    // Init
+    // Initial render
     renderProducts();
-    cartBadge.textContent = cartCount;
-  </script>
+    </script>
 </body>
 </html>

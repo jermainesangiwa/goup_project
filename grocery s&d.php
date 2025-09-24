@@ -1,7 +1,26 @@
-<?php 
+<?php
     session_start();
-    include ('config.php'); 
+    include("config.php"); // DB connection
+
+    // Fetch products from DB
+    $sql = "SELECT product_id, product_name, category, price, product_image FROM Products";
+    $result = $conn->query($sql);
+    
+    // Store results in JSON array
+    $products = [];
+    if ($result && $result->num_rows > 0){
+        while($row = $result->fetch_assoc()){
+            $products[] = [
+                "id" => $row['product_id'],
+                "name" => $row['product_name'],
+                "cat" => strtolower($row['category']), // Match my JS filter
+                "price" => (float)$row['price'],
+                "img" => $row['product_image'] // Store as path e.g. assets/xxx.png
+            ];
+        }
+    }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -99,7 +118,7 @@
     }
   </style>
 </head>
-<body>
+<body data-current-cat="snacks-drinks">
   <!-- Header -->
   <header class="topbar">
     <div class="container topbar-content">
@@ -166,23 +185,23 @@
   
   <!-- Categories -->
   <section class="cats container" id="cats">
-    <div class="cat-card" onclick="window.location.href='grocery food.php'">
+    <div class="cat-card" data-cat="food" onclick="window.location.href='grocery food.php'">
       <i class="material-icons" style="font-size:40px;color:#2b7a78;">restaurant</i>
       <div class="label">Food</div>
     </div>
-    <div class="cat-card" onclick="window.location.href='grocery fruits.php'">
+    <div class="cat-card" data-cat="fruits" onclick="window.location.href='grocery fruits.php'">
       <i class="material-icons" style="font-size:40px;color:#2b7a78;">fruit_emoji</i>
       <div class="label">Fruits</div>
     </div>
-    <div class="cat-card active" onclick="window.location.href='grocery s&d.php'">
+    <div class="cat-card active" data-cat="snacks-drinks" onclick="window.location.href='grocery s&d.php'">
       <i class="material-icons" style="font-size:40px;color:#2b7a78;">local_drink</i>
       <div class="label">Snacks & Drinks</div>
     </div>
-    <div class="cat-card" onclick="window.location.href='grocery stationary.php'">
+    <div class="cat-card" data-cat="stationary" onclick="window.location.href='grocery stationary.php'">
       <i class="material-icons" style="font-size:40px;color:#2b7a78;">edit</i>
       <div class="label">Stationary</div>
     </div>
-    <div class="cat-card" onclick="window.location.href='grocery essentials.php'">
+    <div class="cat-card" data-cat="essentials" onclick="window.location.href='grocery essentials.php'">
       <i class="material-icons" style="font-size:40px;color:#2b7a78;">umbrella</i>
       <div class="label">Essentials</div>
     </div>
@@ -204,145 +223,118 @@
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
   <script>
-      // --- Cart persistence setup ---
-      let cart = JSON.parse(localStorage.getItem('groceryCart')) || [];
-      let cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+        // Data mapped from database
+        const PRODUCTS = <?php echo json_encode($products);?>;
 
-      // --- Product list for Snacks & Drinks page ---
-      const PRODUCTS = [
-          // Snacks
-          { name: 'Cheetos', price: 1.50, img: 'assets/snacks_cheetos.png', cat: 'snacks' },
-          { name: 'Pringles', price: 1.50, img: 'assets/snacks_pringles.png', cat: 'snacks' },
-          { name: 'Doritos', price: 1.50, img: 'assets/snacks_doritos.png', cat: 'snacks' },
-          { name: 'Lays', price: 1.50, img: 'assets/snacks_lays.png', cat: 'snacks' },
-          { name: 'Popcorn', price: 1.50, img: 'assets/snacks_popcorn.png', cat: 'snacks' },
-          { name: 'Crackers', price: 1.50, img: 'assets/snacks_crackers.png', cat: 'snacks' },
-          { name: 'Nuts', price: 1.50, img: 'assets/snacks_nuts.png', cat: 'snacks' },
-          { name: 'Chips', price: 1.50, img: 'assets/snacks_chips.png', cat: 'snacks' },
-          { name: 'Cookies', price: 1.50, img: 'assets/snacks_cookies.png', cat: 'snacks' },
-          { name: 'Candy', price: 1.50, img: 'assets/snacks_candy.png', cat: 'snacks' },
-          // Drinks
-          { name: 'Fanta', price: 1.20, img: 'assets/drinks_fanta.png', cat: 'drinks' },
-          { name: 'Coca cola', price: 1.50, img: 'assets/drinks_cocacola.png', cat: 'drinks' },
-          { name: 'Sprite', price: 1.50, img: 'assets/drinks_sprite.png', cat: 'drinks' },
-          { name: 'Pepsi', price: 1.50, img: 'assets/drinks_pepsi.png', cat: 'drinks' },
-          { name: 'Monster', price: 1.50, img: 'assets/drinks_monster.png', cat: 'drinks' },
-          { name: 'Red Bull', price: 1.50, img: 'assets/drinks_redbull.png', cat: 'drinks' },
-          { name: 'Water', price: 1.50, img: 'assets/drinks_water.png', cat: 'drinks' },
-          { name: 'Juice', price: 1.50, img: 'assets/drinks_juice.png', cat: 'drinks' },
-          { name: 'Tea', price: 1.50, img: 'assets/drinks_tea.png', cat: 'drinks' },
-          { name: 'Coffee', price: 1.50, img: 'assets/drinks_coffee.png', cat: 'drinks' }
-      ];
+        const grid = document.getElementById('grid');
+        const searchInput = document.getElementById('searchInput');
+        const cartBadge = document.getElementById('cartBadge');
+        const toast = document.getElementById('toast');
 
-      // --- DOM elements ---
-      const grid = document.getElementById('grid');
-      const cartBadge = document.getElementById('cartBadge');
-      const toast = document.getElementById('toast');
-      const searchInput = document.getElementById('searchInput');
+        // Detect default filter from <body data-current-cat="">
+        let currentFilter = document.body.dataset.currentCat || 'all';
+        let cartCount = 0;
 
-      // --- Keep track of active category filter ---
-      let currentFilter = 'all';
+        function renderProducts() {
+            grid.innerHTML = '';
+            const q = (searchInput.value || '').trim().toLowerCase();
+            PRODUCTS.filter(p =>
+                (currentFilter === 'all' || p.cat === currentFilter) &&
+                (!q || p.name.toLowerCase().includes(q))
+            ).forEach(p => grid.appendChild(cardEl(p)));
+        }
 
-      // --- Render products (supports filter + search) ---
-      function renderProducts() {
-          grid.innerHTML = '';
-          const q = (searchInput?.value || '').toLowerCase();
+        function cardEl(p) {
+            const el = document.createElement('article');
+            el.className = 'card';
 
-          PRODUCTS.filter(p =>
-          (currentFilter === 'all' || p.cat === currentFilter) &&
-          (!q || p.name.toLowerCase().includes(q))
-          ).forEach(p => {
-          const card = document.createElement('div');
-          card.className = 'card';
-          card.innerHTML = `
-              <div class="thumb" style="background-image:url('${p.img}')"></div>
-              <div class="meta">
-              <div class="name">${p.name}</div>
-              <div class="price">$${p.price.toFixed(2)}</div>
-              </div>
-              <button class="add" onclick="addToCart('${p.name}')">Add</button>
-          `;
-          grid.appendChild(card);
-          });
-      }
+            const thumb = document.createElement('div');
+            thumb.className = 'thumb';
+            thumb.style.backgroundImage = `url('${p.img || ''}')`;
 
-      // --- Add to cart function ---
-      function addToCart(name) {
-          const item = cart.find(i => i.name === name);
-          if (item) item.quantity++;
-          else cart.push({ name, quantity: 1 });
+            const meta = document.createElement('div');
+            meta.className = 'meta';
 
-          localStorage.setItem('groceryCart', JSON.stringify(cart));
-          cartCount++;
-          cartBadge.textContent = cartCount;
-          showToast(`${name} added to cart`);
-      }
+            const name = document.createElement('div');
+            name.className = 'name';
+            name.textContent = p.name;
 
-      // --- Show toast notification ---
-      function showToast(msg) {
-          toast.textContent = msg;
-          toast.classList.add('show');
-          setTimeout(() => toast.classList.remove('show'), 2000);
-      }
+            const price = document.createElement('div');
+            price.className = 'price';
+            price.textContent = "₹" + Number(p.price).toFixed(2);
 
-      // --- Placeholder cart popup ---
-      function openCart() {
-          alert('Cart functionality goes here.');
-      }
 
-      // --- Nav filter links ---
-      document.querySelectorAll('.nav-link').forEach(link => {
-          link.addEventListener('click', () => {
-          document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-          link.classList.add('active');
-          currentFilter = link.dataset.filter;
-          renderProducts();
-          });
-      });
+            const add = document.createElement('button');
+            add.className = 'add';
+            add.type = 'button';
+            add.textContent = 'Add to cart';
+            add.addEventListener('click', () => {
+                cartCount += 1;
+                cartBadge.textContent = String(cartCount);
+                showToast(`${p.name} added to cart`);
+            });
 
-      // --- Category cards highlighting ---
-      document.querySelectorAll('.cat-card').forEach(card => {
-          card.addEventListener('click', () => {
-          document.querySelectorAll('.cat-card').forEach(c => c.classList.remove('active'));
-          card.classList.add('active');
-          currentFilter = card.dataset.cat || 'all';
-          renderProducts();
-          });
-      });
+            meta.appendChild(name);
+            meta.appendChild(price);
+            el.appendChild(thumb);
+            el.appendChild(meta);
+            el.appendChild(add);
+            return el;
+        }
 
-      // --- Back to top ---
-      document.getElementById('backTop').addEventListener('click', () =>
-          window.scrollTo({ top: 0, behavior: 'smooth' })
-      );
+        function showToast(msg) {
+            toast.textContent = msg;
+            toast.classList.add('show');
+            clearTimeout(showToast._t);
+            showToast._t = setTimeout(() => toast.classList.remove('show'), 2200);
+        }
 
-      // --- Banner carousel ---
-      const slides = document.getElementById('slides');
-      const slideCount = slides.children.length;
-      let slideIndex = 0;
+        // Search
+        searchInput.addEventListener('input', renderProducts);
 
-      function go(i) {
-          slideIndex = (i + slideCount) % slideCount;
-          slides.style.transform = `translateX(-${slideIndex * 100}%)`;
-      }
+        // Category chips
+        document.getElementById('cats').addEventListener('click', (e) => {
+            const card = e.target.closest('.cat-card');
+            if (!card) return;
+            document.querySelectorAll('.cat-card').forEach(c => c.classList.remove('active'));
+            card.classList.add('active');
+            currentFilter = card.dataset.cat || 'all';
+            renderProducts();
+        });
 
-      document.getElementById('btnPrev').addEventListener('click', () => go(slideIndex - 1));
-      document.getElementById('btnNext').addEventListener('click', () => go(slideIndex + 1));
+        // Highlight correct category card on page load
+        document.querySelectorAll('.cat-card').forEach(c => {
+            if (c.dataset.cat === currentFilter) {
+                c.classList.add('active');
+            } else {
+                c.classList.remove('active');
+            }
+        });
 
-      // Auto slide every 5s
-      let carouselTimer = setInterval(() => go(slideIndex + 1), 5000);
+        // Section bar quick filters
+        document.querySelectorAll('.nav-link').forEach(n => n.addEventListener('click', () => {
+            document.querySelectorAll('.nav-link').forEach(x => x.classList.remove('active'));
+            n.classList.add('active');
+        }));
 
-      // Initialize carousel on first load
-      go(0);
+        // Carousel
+        const slides = document.getElementById('slides');
+        const slideCount = slides.children.length;
+        let slideIndex = 0;
+        function go(i) {
+            slideIndex = (i + slideCount) % slideCount;
+            slides.style.transform = `translateX(-${slideIndex * 100}%)`;
+        }
+        document.getElementById('btnPrev').addEventListener('click', () => go(slideIndex - 1));
+        document.getElementById('btnNext').addEventListener('click', () => go(slideIndex + 1));
+        setInterval(() => go(slideIndex + 1), 5000);
 
-      // --- Search input (if present) ---
-      if (searchInput) {
-          searchInput.addEventListener('input', renderProducts);
-      }
+        // Back to top
+        document.getElementById('backTop').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
-      // --- Initial setup ---
-      renderProducts();
-      cartBadge.textContent = cartCount;
-  </script>
+        // Initial render
+        renderProducts();
+    </script>
 
 </body>
 </html>

@@ -1,6 +1,24 @@
 <?php
     session_start();
-    include("config.php");
+    include("config.php"); // DB connection
+
+    // Fetch products from DB
+    $sql = "SELECT product_id, product_name, category, price, product_image FROM Products";
+    $result = $conn->query($sql);
+    
+    // Store results in JSON array
+    $products = [];
+    if ($result && $result->num_rows > 0){
+        while($row = $result->fetch_assoc()){
+            $products[] = [
+                "id" => $row['product_id'],
+                "name" => $row['product_name'],
+                "cat" => strtolower($row['category']), // Match my JS filter
+                "price" => (float)$row['price'],
+                "img" => $row['product_image'] // Store as path e.g. assets/xxx.png
+            ];
+        }
+    }
 ?>
 
 <!DOCTYPE html>
@@ -458,7 +476,7 @@
     </style>
     <script>const IMG=(p)=>p; </script>
 </head>
-<body>
+<body data-current-cat="fruits">
      <header class="topbar">
         <div class="container topbar-content">
             <!-- Location -->
@@ -533,23 +551,23 @@
 
     <!-- Categories -->
     <section class="cats container" id="cats">
-        <div class="cat-card" onclick="window.location.href='grocery food.php'">
+        <div class="cat-card" data-cat="food" onclick="window.location.href='grocery food.php'">
             <i class="material-icons" style="font-size:40px;color:#2b7a78;">restaurant</i>
             <div class="label">Food</div>
         </div>
-        <div class="cat-card active" onclick="window.location.href='grocery fruits.php'">
+        <div class="cat-card active" data-cat="fruits" onclick="window.location.href='grocery fruits.php'">
                 <i class="material-icons" style="font-size:40px;color:#2b7a78;">fruit_emoji</i>
                 <div class="label">Fruits</div>
         </div>
-        <div class="cat-card" onclick="window.location.href='grocery s&d.php'">
+        <div class="cat-card" data-cat="snacks-drinks" onclick="window.location.href='grocery s&d.php'">
                 <i class="material-icons" style="font-size:40px;color:#2b7a78;">local_drink</i>
                 <div class="label">Snacks & Drinks</div>
         </div>
-        <div class="cat-card" onclick="window.location.href='grocery stationary.php'">
+        <div class="cat-card" data-cat="stationary" onclick="window.location.href='grocery stationary.php'">
                 <i class="material-icons" style="font-size:40px;color:#2b7a78;">edit</i>
                 <div class="label">Stationary</div>
         </div>
-        <div class="cat-card" onclick="window.location.href='grocery essentials.php'">
+        <div class="cat-card" data-cat="essentials" onclick="window.location.href='grocery essentials.php'">
                 <i class="material-icons" style="font-size:40px;color:#2b7a78;">umbrella</i>
                 <div class="label">Essentials</div>
         </div>
@@ -590,56 +608,49 @@
     </footer>
 
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    
     <script>
-        // Data mapped from Figma labels (subset for demo, can be extended)
-        const PRODUCTS = [
-            { name: 'Fanta', price: 1.20, img: 'assets/card_img_2.png', cat: 'drinks' },
-            { name: 'Coca cola', price: 1.50, img: 'assets/card_img_6.png', cat: 'drinks' },
-            { name: 'Coca cola', price: 1.50, img: 'assets/card_img_5.png', cat: 'drinks' },
-            { name: 'Litchi', price: 1.20, img: 'assets/card_img_3.png', cat: 'drinks' },
-            { name: 'Fanta', price: 1.20, img: 'assets/card_img_1.png', cat: 'drinks' },
-            { name: 'Cheetos', price: 1.50, img: 'assets/card_img_9.png', cat: 'snacks' },
-            { name: 'Pringles', price: 1.50, img: 'assets/card_img_12.png', cat: 'snacks' },
-            { name: 'Sprite', price: 1.50, img: 'assets/card_img_7.png', cat: 'drinks' },
-            { name: 'Splush', price: 1.50, img: 'assets/card_img_11.png', cat: 'drinks' },
-            { name: 'Storia', price: 1.50, img: 'assets/card_img_10.png', cat: 'drinks' },
-            { name: 'Monster', price: 1.50, img: 'assets/card_img_14.png', cat: 'drinks' },
-            { name: 'Monster', price: 1.50, img: 'assets/card_img_16.png', cat: 'drinks' },
-            { name: 'Monster', price: 1.50, img: 'assets/card_img_18.png', cat: 'drinks' },
-            { name: 'Real fruit orange', price: 1.50, img: 'assets/card_img_13.png', cat: 'drinks' },
-            { name: 'M.Maid', price: 1.50, img: 'assets/card_img_17.png', cat: 'drinks' },
-            { name: 'Welch’s', price: 1.50, img: 'assets/card_img_15.png', cat: 'drinks' },
-            { name: 'Raw', price: 1.50, img: 'assets/card_img_8.png', cat: 'drinks' },
-        ];
+        // Data mapped from database
+        const PRODUCTS = <?php echo json_encode($products);?>;
 
         const grid = document.getElementById('grid');
         const searchInput = document.getElementById('searchInput');
         const cartBadge = document.getElementById('cartBadge');
         const toast = document.getElementById('toast');
+
+        // Detect default filter from <body data-current-cat="">
+        let currentFilter = document.body.dataset.currentCat || 'all';
         let cartCount = 0;
-        let currentFilter = 'all';
 
         function renderProducts() {
             grid.innerHTML = '';
             const q = (searchInput.value || '').trim().toLowerCase();
-            PRODUCTS.filter(p => (currentFilter==='all' || p.cat===currentFilter) && (!q || p.name.toLowerCase().includes(q)))
-                .forEach(p => grid.appendChild(cardEl(p)));
+            PRODUCTS.filter(p =>
+                (currentFilter === 'all' || p.cat === currentFilter) &&
+                (!q || p.name.toLowerCase().includes(q))
+            ).forEach(p => grid.appendChild(cardEl(p)));
         }
 
         function cardEl(p) {
             const el = document.createElement('article');
             el.className = 'card';
+
             const thumb = document.createElement('div');
             thumb.className = 'thumb';
             thumb.style.backgroundImage = `url('${p.img || ''}')`;
+
             const meta = document.createElement('div');
             meta.className = 'meta';
+
             const name = document.createElement('div');
             name.className = 'name';
             name.textContent = p.name;
+
             const price = document.createElement('div');
             price.className = 'price';
-            price.textContent = `$${p.price.toFixed(2)}`;
+            price.textContent = "₹" + Number(p.price).toFixed(2);
+
+
             const add = document.createElement('button');
             add.className = 'add';
             add.type = 'button';
@@ -649,13 +660,12 @@
                 cartBadge.textContent = String(cartCount);
                 showToast(`${p.name} added to cart`);
             });
+
             meta.appendChild(name);
             meta.appendChild(price);
             el.appendChild(thumb);
             el.appendChild(meta);
             el.appendChild(add);
-            el.setAttribute('data-cat', p.cat);
-            el.setAttribute('data-name', p.name);
             return el;
         }
 
@@ -679,11 +689,19 @@
             renderProducts();
         });
 
-        // Section bar quick filters (for demo they map to categories)
+        // Highlight correct category card on page load
+        document.querySelectorAll('.cat-card').forEach(c => {
+            if (c.dataset.cat === currentFilter) {
+                c.classList.add('active');
+            } else {
+                c.classList.remove('active');
+            }
+        });
+
+        // Section bar quick filters
         document.querySelectorAll('.nav-link').forEach(n => n.addEventListener('click', () => {
             document.querySelectorAll('.nav-link').forEach(x => x.classList.remove('active'));
             n.classList.add('active');
-            // keep as visual only per spec
         }));
 
         // Carousel
