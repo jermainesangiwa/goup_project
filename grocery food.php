@@ -476,7 +476,7 @@
     </style>
     <script>const IMG=(p)=>p; </script>
 </head>
-<body>
+<body data-current-cat="food">
      <header class="topbar">
         <div class="container topbar-content">
             <!-- Location -->
@@ -551,23 +551,23 @@
 
     <!-- Categories -->
     <section class="cats container" id="cats">
-        <div class="cat-card active" onclick="window.location.href='grocery food.php'">
+        <div class="cat-card active" data-cat="food" onclick="window.location.href='grocery food.php'">
             <i class="material-icons" style="font-size:40px;color:#2b7a78;">restaurant</i>
             <div class="label">Food</div>
         </div>
-        <div class="cat-card" onclick="window.location.href='grocery fruits.php'">
+        <div class="cat-card" data-cat="fruits" onclick="window.location.href='grocery fruits.php'">
                 <i class="material-icons" style="font-size:40px;color:#2b7a78;">fruit_emoji</i>
                 <div class="label">Fruits</div>
         </div>
-        <div class="cat-card" onclick="window.location.href='grocery s&d.php'">
+        <div class="cat-card" data-cat="snacks-drinks" onclick="window.location.href='grocery s&d.php'">
                 <i class="material-icons" style="font-size:40px;color:#2b7a78;">local_drink</i>
                 <div class="label">Snacks & Drinks</div>
         </div>
-        <div class="cat-card" onclick="window.location.href='grocery stationary.php'">
+        <div class="cat-card" data-cat="stationary" onclick="window.location.href='grocery stationary.php'">
                 <i class="material-icons" style="font-size:40px;color:#2b7a78;">edit</i>
                 <div class="label">Stationary</div>
         </div>
-        <div class="cat-card" onclick="window.location.href='grocery essentials.php'">
+        <div class="cat-card" data-cat="essentials" onclick="window.location.href='grocery essentials.php'">
                 <i class="material-icons" style="font-size:40px;color:#2b7a78;">umbrella</i>
                 <div class="label">Essentials</div>
         </div>
@@ -608,6 +608,7 @@
     </footer>
 
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    
     <script>
         // Data mapped from database
         const PRODUCTS = <?php echo json_encode($products);?>;
@@ -616,30 +617,39 @@
         const searchInput = document.getElementById('searchInput');
         const cartBadge = document.getElementById('cartBadge');
         const toast = document.getElementById('toast');
+
+        // Detect default filter from <body data-current-cat="">
+        let currentFilter = document.body.dataset.currentCat || 'all';
         let cartCount = 0;
-        let currentFilter = 'all';
 
         function renderProducts() {
             grid.innerHTML = '';
             const q = (searchInput.value || '').trim().toLowerCase();
-            PRODUCTS.filter(p => (currentFilter==='all' || p.cat===currentFilter) && (!q || p.name.toLowerCase().includes(q)))
-                .forEach(p => grid.appendChild(cardEl(p)));
+            PRODUCTS.filter(p =>
+                (currentFilter === 'all' || p.cat === currentFilter) &&
+                (!q || p.name.toLowerCase().includes(q))
+            ).forEach(p => grid.appendChild(cardEl(p)));
         }
 
         function cardEl(p) {
             const el = document.createElement('article');
             el.className = 'card';
+
             const thumb = document.createElement('div');
             thumb.className = 'thumb';
             thumb.style.backgroundImage = `url('${p.img || ''}')`;
+
             const meta = document.createElement('div');
             meta.className = 'meta';
+
             const name = document.createElement('div');
             name.className = 'name';
             name.textContent = p.name;
+
             const price = document.createElement('div');
             price.className = 'price';
-            price.textContent = `$${p.price.toFixed(2)}`;
+            price.textContent = `₹${p.price.toFixed(2)}`;
+
             const add = document.createElement('button');
             add.className = 'add';
             add.type = 'button';
@@ -649,13 +659,12 @@
                 cartBadge.textContent = String(cartCount);
                 showToast(`${p.name} added to cart`);
             });
+
             meta.appendChild(name);
             meta.appendChild(price);
             el.appendChild(thumb);
             el.appendChild(meta);
             el.appendChild(add);
-            el.setAttribute('data-cat', p.cat);
-            el.setAttribute('data-name', p.name);
             return el;
         }
 
@@ -679,11 +688,19 @@
             renderProducts();
         });
 
-        // Section bar quick filters (for demo they map to categories)
+        // Highlight correct category card on page load
+        document.querySelectorAll('.cat-card').forEach(c => {
+            if (c.dataset.cat === currentFilter) {
+                c.classList.add('active');
+            } else {
+                c.classList.remove('active');
+            }
+        });
+
+        // Section bar quick filters
         document.querySelectorAll('.nav-link').forEach(n => n.addEventListener('click', () => {
             document.querySelectorAll('.nav-link').forEach(x => x.classList.remove('active'));
             n.classList.add('active');
-            // keep as visual only per spec
         }));
 
         // Carousel
@@ -704,6 +721,7 @@
         // Initial render
         renderProducts();
     </script>
+
 </body>
 </html>
 
