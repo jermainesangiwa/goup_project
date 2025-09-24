@@ -118,7 +118,7 @@
     }
   </style>
 </head>
-<body data-current-cat="snack-drink">
+<body data-current-cat="snack drink">
   <!-- Header -->
   <header class="topbar">
     <div class="container topbar-content">
@@ -193,7 +193,7 @@
       <i class="material-icons" style="font-size:40px;color:#2b7a78;">fruit_emoji</i>
       <div class="label">Fruits</div>
     </div>
-    <div class="cat-card active" data-cat="snack-drink" onclick="window.location.href='grocery s&d.php'">
+    <div class="cat-card active" data-cat="snack drink" onclick="window.location.href='grocery s&d.php'">
       <i class="material-icons" style="font-size:40px;color:#2b7a78;">local_drink</i>
       <div class="label">Snacks & Drinks</div>
     </div>
