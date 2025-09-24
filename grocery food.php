@@ -1,6 +1,24 @@
 <?php
     session_start();
-    include("config.php");
+    include("config.php"); // DB connection
+
+    // Fetch products from DB
+    $sql = "SELECT product_id, product_name, category, price, product_image FROM Products";
+    $result = $conn->query($sql);
+    
+    // Store results in JSON array
+    $products = [];
+    if ($result && $result->num_rows > 0){
+        while($row = $result->fetch_assoc()){
+            $products[] = [
+                "id" => $row['product_id'],
+                "name" => $row['product_name'],
+                "cat" => strtolower($row['category']), // Match my JS filter
+                "price" => (float)$row['price'],
+                "img" => $row['product_image'] // Store as path e.g. assets/xxx.png
+            ];
+        }
+    }
 ?>
 
 <!DOCTYPE html>
@@ -591,26 +609,8 @@
 
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
     <script>
-        // Data mapped from Figma labels (subset for demo, can be extended)
-        const PRODUCTS = [
-            { name: 'Fanta', price: 1.20, img: 'assets/card_img_2.png', cat: 'drinks' },
-            { name: 'Coca cola', price: 1.50, img: 'assets/card_img_6.png', cat: 'drinks' },
-            { name: 'Coca cola', price: 1.50, img: 'assets/card_img_5.png', cat: 'drinks' },
-            { name: 'Litchi', price: 1.20, img: 'assets/card_img_3.png', cat: 'drinks' },
-            { name: 'Fanta', price: 1.20, img: 'assets/card_img_1.png', cat: 'drinks' },
-            { name: 'Cheetos', price: 1.50, img: 'assets/card_img_9.png', cat: 'snacks' },
-            { name: 'Pringles', price: 1.50, img: 'assets/card_img_12.png', cat: 'snacks' },
-            { name: 'Sprite', price: 1.50, img: 'assets/card_img_7.png', cat: 'drinks' },
-            { name: 'Splush', price: 1.50, img: 'assets/card_img_11.png', cat: 'drinks' },
-            { name: 'Storia', price: 1.50, img: 'assets/card_img_10.png', cat: 'drinks' },
-            { name: 'Monster', price: 1.50, img: 'assets/card_img_14.png', cat: 'drinks' },
-            { name: 'Monster', price: 1.50, img: 'assets/card_img_16.png', cat: 'drinks' },
-            { name: 'Monster', price: 1.50, img: 'assets/card_img_18.png', cat: 'drinks' },
-            { name: 'Real fruit orange', price: 1.50, img: 'assets/card_img_13.png', cat: 'drinks' },
-            { name: 'M.Maid', price: 1.50, img: 'assets/card_img_17.png', cat: 'drinks' },
-            { name: 'Welch’s', price: 1.50, img: 'assets/card_img_15.png', cat: 'drinks' },
-            { name: 'Raw', price: 1.50, img: 'assets/card_img_8.png', cat: 'drinks' },
-        ];
+        // Data mapped from database
+        const PRODUCTS = <?php echo json_encode($products);?>;
 
         const grid = document.getElementById('grid');
         const searchInput = document.getElementById('searchInput');
