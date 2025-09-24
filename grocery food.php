@@ -648,7 +648,8 @@
 
             const price = document.createElement('div');
             price.className = 'price';
-            price.textContent = `₹${p.price.toFixed(2)}`;
+            price.textContent = "₹" + Number(p.price).toFixed(2);
+
 
             const add = document.createElement('button');
             add.className = 'add';
