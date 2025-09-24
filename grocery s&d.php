@@ -118,7 +118,7 @@
     }
   </style>
 </head>
-<body data-current-cat="snacks-drinks">
+<body data-current-cat="snack-drink">
   <!-- Header -->
   <header class="topbar">
     <div class="container topbar-content">
@@ -189,11 +189,11 @@
       <i class="material-icons" style="font-size:40px;color:#2b7a78;">restaurant</i>
       <div class="label">Food</div>
     </div>
-    <div class="cat-card" data-cat="fruits" onclick="window.location.href='grocery fruits.php'">
+    <div class="cat-card" data-cat="fruit" onclick="window.location.href='grocery fruits.php'">
       <i class="material-icons" style="font-size:40px;color:#2b7a78;">fruit_emoji</i>
       <div class="label">Fruits</div>
     </div>
-    <div class="cat-card active" data-cat="snacks-drinks" onclick="window.location.href='grocery s&d.php'">
+    <div class="cat-card active" data-cat="snack-drink" onclick="window.location.href='grocery s&d.php'">
       <i class="material-icons" style="font-size:40px;color:#2b7a78;">local_drink</i>
       <div class="label">Snacks & Drinks</div>
     </div>
@@ -201,7 +201,7 @@
       <i class="material-icons" style="font-size:40px;color:#2b7a78;">edit</i>
       <div class="label">Stationary</div>
     </div>
-    <div class="cat-card" data-cat="essentials" onclick="window.location.href='grocery essentials.php'">
+    <div class="cat-card" data-cat="essential" onclick="window.location.href='grocery essentials.php'">
       <i class="material-icons" style="font-size:40px;color:#2b7a78;">umbrella</i>
       <div class="label">Essentials</div>
     </div>
