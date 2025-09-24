@@ -8,6 +8,6 @@ $_SESSION = array();
 session_destroy();
 
 // Redirect to login page
-header("Location: grocery food&fruits.php");
+header("Location: grocery food.php");
 exit();
 ?>

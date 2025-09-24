@@ -164,25 +164,29 @@
     <div class="carousel-btn right" id="btnNext" aria-label="Next">▶</div>
   </section>
   
-   <!-- Categories -->
-   <section class="cats container" id="cats">
-    <div class="cat-card" onclick="window.location.href='grocery food&fruits.php'">
-        <i class="material-icons" style="font-size:40px;color:#2b7a78;">emoji_food_beverage</i>
-        <div class="label">Food & Fruits</div>
+  <!-- Categories -->
+  <section class="cats container" id="cats">
+    <div class="cat-card" onclick="window.location.href='grocery food.php'">
+      <i class="material-icons" style="font-size:40px;color:#2b7a78;">fast_food</i>
+      <div class="label">Food</div>
+    </div>
+    <div class="cat-card" onclick="window.location.href='grocery fruits.php'">
+      <i class="material-icons" style="font-size:40px;color:#2b7a78;">Nutrition</i>
+      <div class="label">Fruits</div>
     </div>
     <div class="cat-card active" onclick="window.location.href='grocery s&d.php'">
-        <i class="material-icons" style="font-size:40px;color:#2b7a78;">local_drink</i>
-        <div class="label">Snacks & Drinks</div>
+      <i class="material-icons" style="font-size:40px;color:#2b7a78;">local_drink</i>
+      <div class="label">Snacks & Drinks</div>
     </div>
     <div class="cat-card" onclick="window.location.href='grocery stationary.php'">
-        <i class="material-icons" style="font-size:40px;color:#2b7a78;">edit</i>
-        <div class="label">Stationary</div>
+      <i class="material-icons" style="font-size:40px;color:#2b7a78;">edit</i>
+      <div class="label">Stationary</div>
     </div>
-    <div class="cat-card" onclick="window.location.href='grocery pharmacy.php'">
-        <i class="material-icons" style="font-size:40px;color:#2b7a78;">medical_services</i>
-        <div class="label">Pharmacy</div>
+    <div class="cat-card" onclick="window.location.href='grocery essentials.php'">
+      <i class="material-icons" style="font-size:40px;color:#2b7a78;">umbrella</i>
+      <div class="label">Essentials</div>
     </div>
-    </section>
+  </section>
 
   <h3 class="section-title container">Best of Snacks & Drinks</h3>
   <section class="grid container" id="grid"></section>
@@ -199,146 +203,146 @@
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-    <script>
-        // --- Cart persistence setup ---
-        let cart = JSON.parse(localStorage.getItem('groceryCart')) || [];
-        let cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+  <script>
+      // --- Cart persistence setup ---
+      let cart = JSON.parse(localStorage.getItem('groceryCart')) || [];
+      let cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
-        // --- Product list for Snacks & Drinks page ---
-        const PRODUCTS = [
-            // Snacks
-            { name: 'Cheetos', price: 1.50, img: 'assets/snacks_cheetos.png', cat: 'snacks' },
-            { name: 'Pringles', price: 1.50, img: 'assets/snacks_pringles.png', cat: 'snacks' },
-            { name: 'Doritos', price: 1.50, img: 'assets/snacks_doritos.png', cat: 'snacks' },
-            { name: 'Lays', price: 1.50, img: 'assets/snacks_lays.png', cat: 'snacks' },
-            { name: 'Popcorn', price: 1.50, img: 'assets/snacks_popcorn.png', cat: 'snacks' },
-            { name: 'Crackers', price: 1.50, img: 'assets/snacks_crackers.png', cat: 'snacks' },
-            { name: 'Nuts', price: 1.50, img: 'assets/snacks_nuts.png', cat: 'snacks' },
-            { name: 'Chips', price: 1.50, img: 'assets/snacks_chips.png', cat: 'snacks' },
-            { name: 'Cookies', price: 1.50, img: 'assets/snacks_cookies.png', cat: 'snacks' },
-            { name: 'Candy', price: 1.50, img: 'assets/snacks_candy.png', cat: 'snacks' },
-            // Drinks
-            { name: 'Fanta', price: 1.20, img: 'assets/drinks_fanta.png', cat: 'drinks' },
-            { name: 'Coca cola', price: 1.50, img: 'assets/drinks_cocacola.png', cat: 'drinks' },
-            { name: 'Sprite', price: 1.50, img: 'assets/drinks_sprite.png', cat: 'drinks' },
-            { name: 'Pepsi', price: 1.50, img: 'assets/drinks_pepsi.png', cat: 'drinks' },
-            { name: 'Monster', price: 1.50, img: 'assets/drinks_monster.png', cat: 'drinks' },
-            { name: 'Red Bull', price: 1.50, img: 'assets/drinks_redbull.png', cat: 'drinks' },
-            { name: 'Water', price: 1.50, img: 'assets/drinks_water.png', cat: 'drinks' },
-            { name: 'Juice', price: 1.50, img: 'assets/drinks_juice.png', cat: 'drinks' },
-            { name: 'Tea', price: 1.50, img: 'assets/drinks_tea.png', cat: 'drinks' },
-            { name: 'Coffee', price: 1.50, img: 'assets/drinks_coffee.png', cat: 'drinks' }
-        ];
+      // --- Product list for Snacks & Drinks page ---
+      const PRODUCTS = [
+          // Snacks
+          { name: 'Cheetos', price: 1.50, img: 'assets/snacks_cheetos.png', cat: 'snacks' },
+          { name: 'Pringles', price: 1.50, img: 'assets/snacks_pringles.png', cat: 'snacks' },
+          { name: 'Doritos', price: 1.50, img: 'assets/snacks_doritos.png', cat: 'snacks' },
+          { name: 'Lays', price: 1.50, img: 'assets/snacks_lays.png', cat: 'snacks' },
+          { name: 'Popcorn', price: 1.50, img: 'assets/snacks_popcorn.png', cat: 'snacks' },
+          { name: 'Crackers', price: 1.50, img: 'assets/snacks_crackers.png', cat: 'snacks' },
+          { name: 'Nuts', price: 1.50, img: 'assets/snacks_nuts.png', cat: 'snacks' },
+          { name: 'Chips', price: 1.50, img: 'assets/snacks_chips.png', cat: 'snacks' },
+          { name: 'Cookies', price: 1.50, img: 'assets/snacks_cookies.png', cat: 'snacks' },
+          { name: 'Candy', price: 1.50, img: 'assets/snacks_candy.png', cat: 'snacks' },
+          // Drinks
+          { name: 'Fanta', price: 1.20, img: 'assets/drinks_fanta.png', cat: 'drinks' },
+          { name: 'Coca cola', price: 1.50, img: 'assets/drinks_cocacola.png', cat: 'drinks' },
+          { name: 'Sprite', price: 1.50, img: 'assets/drinks_sprite.png', cat: 'drinks' },
+          { name: 'Pepsi', price: 1.50, img: 'assets/drinks_pepsi.png', cat: 'drinks' },
+          { name: 'Monster', price: 1.50, img: 'assets/drinks_monster.png', cat: 'drinks' },
+          { name: 'Red Bull', price: 1.50, img: 'assets/drinks_redbull.png', cat: 'drinks' },
+          { name: 'Water', price: 1.50, img: 'assets/drinks_water.png', cat: 'drinks' },
+          { name: 'Juice', price: 1.50, img: 'assets/drinks_juice.png', cat: 'drinks' },
+          { name: 'Tea', price: 1.50, img: 'assets/drinks_tea.png', cat: 'drinks' },
+          { name: 'Coffee', price: 1.50, img: 'assets/drinks_coffee.png', cat: 'drinks' }
+      ];
 
-        // --- DOM elements ---
-        const grid = document.getElementById('grid');
-        const cartBadge = document.getElementById('cartBadge');
-        const toast = document.getElementById('toast');
-        const searchInput = document.getElementById('searchInput');
+      // --- DOM elements ---
+      const grid = document.getElementById('grid');
+      const cartBadge = document.getElementById('cartBadge');
+      const toast = document.getElementById('toast');
+      const searchInput = document.getElementById('searchInput');
 
-        // --- Keep track of active category filter ---
-        let currentFilter = 'all';
+      // --- Keep track of active category filter ---
+      let currentFilter = 'all';
 
-        // --- Render products (supports filter + search) ---
-        function renderProducts() {
-            grid.innerHTML = '';
-            const q = (searchInput?.value || '').toLowerCase();
+      // --- Render products (supports filter + search) ---
+      function renderProducts() {
+          grid.innerHTML = '';
+          const q = (searchInput?.value || '').toLowerCase();
 
-            PRODUCTS.filter(p =>
-            (currentFilter === 'all' || p.cat === currentFilter) &&
-            (!q || p.name.toLowerCase().includes(q))
-            ).forEach(p => {
-            const card = document.createElement('div');
-            card.className = 'card';
-            card.innerHTML = `
-                <div class="thumb" style="background-image:url('${p.img}')"></div>
-                <div class="meta">
-                <div class="name">${p.name}</div>
-                <div class="price">$${p.price.toFixed(2)}</div>
-                </div>
-                <button class="add" onclick="addToCart('${p.name}')">Add</button>
-            `;
-            grid.appendChild(card);
-            });
-        }
+          PRODUCTS.filter(p =>
+          (currentFilter === 'all' || p.cat === currentFilter) &&
+          (!q || p.name.toLowerCase().includes(q))
+          ).forEach(p => {
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.innerHTML = `
+              <div class="thumb" style="background-image:url('${p.img}')"></div>
+              <div class="meta">
+              <div class="name">${p.name}</div>
+              <div class="price">$${p.price.toFixed(2)}</div>
+              </div>
+              <button class="add" onclick="addToCart('${p.name}')">Add</button>
+          `;
+          grid.appendChild(card);
+          });
+      }
 
-        // --- Add to cart function ---
-        function addToCart(name) {
-            const item = cart.find(i => i.name === name);
-            if (item) item.quantity++;
-            else cart.push({ name, quantity: 1 });
+      // --- Add to cart function ---
+      function addToCart(name) {
+          const item = cart.find(i => i.name === name);
+          if (item) item.quantity++;
+          else cart.push({ name, quantity: 1 });
 
-            localStorage.setItem('groceryCart', JSON.stringify(cart));
-            cartCount++;
-            cartBadge.textContent = cartCount;
-            showToast(`${name} added to cart`);
-        }
+          localStorage.setItem('groceryCart', JSON.stringify(cart));
+          cartCount++;
+          cartBadge.textContent = cartCount;
+          showToast(`${name} added to cart`);
+      }
 
-        // --- Show toast notification ---
-        function showToast(msg) {
-            toast.textContent = msg;
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 2000);
-        }
+      // --- Show toast notification ---
+      function showToast(msg) {
+          toast.textContent = msg;
+          toast.classList.add('show');
+          setTimeout(() => toast.classList.remove('show'), 2000);
+      }
 
-        // --- Placeholder cart popup ---
-        function openCart() {
-            alert('Cart functionality goes here.');
-        }
+      // --- Placeholder cart popup ---
+      function openCart() {
+          alert('Cart functionality goes here.');
+      }
 
-        // --- Nav filter links ---
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', () => {
-            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-            link.classList.add('active');
-            currentFilter = link.dataset.filter;
-            renderProducts();
-            });
-        });
+      // --- Nav filter links ---
+      document.querySelectorAll('.nav-link').forEach(link => {
+          link.addEventListener('click', () => {
+          document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+          link.classList.add('active');
+          currentFilter = link.dataset.filter;
+          renderProducts();
+          });
+      });
 
-        // --- Category cards highlighting ---
-        document.querySelectorAll('.cat-card').forEach(card => {
-            card.addEventListener('click', () => {
-            document.querySelectorAll('.cat-card').forEach(c => c.classList.remove('active'));
-            card.classList.add('active');
-            currentFilter = card.dataset.cat || 'all';
-            renderProducts();
-            });
-        });
+      // --- Category cards highlighting ---
+      document.querySelectorAll('.cat-card').forEach(card => {
+          card.addEventListener('click', () => {
+          document.querySelectorAll('.cat-card').forEach(c => c.classList.remove('active'));
+          card.classList.add('active');
+          currentFilter = card.dataset.cat || 'all';
+          renderProducts();
+          });
+      });
 
-        // --- Back to top ---
-        document.getElementById('backTop').addEventListener('click', () =>
-            window.scrollTo({ top: 0, behavior: 'smooth' })
-        );
+      // --- Back to top ---
+      document.getElementById('backTop').addEventListener('click', () =>
+          window.scrollTo({ top: 0, behavior: 'smooth' })
+      );
 
-        // --- Banner carousel ---
-        const slides = document.getElementById('slides');
-        const slideCount = slides.children.length;
-        let slideIndex = 0;
+      // --- Banner carousel ---
+      const slides = document.getElementById('slides');
+      const slideCount = slides.children.length;
+      let slideIndex = 0;
 
-        function go(i) {
-            slideIndex = (i + slideCount) % slideCount;
-            slides.style.transform = `translateX(-${slideIndex * 100}%)`;
-        }
+      function go(i) {
+          slideIndex = (i + slideCount) % slideCount;
+          slides.style.transform = `translateX(-${slideIndex * 100}%)`;
+      }
 
-        document.getElementById('btnPrev').addEventListener('click', () => go(slideIndex - 1));
-        document.getElementById('btnNext').addEventListener('click', () => go(slideIndex + 1));
+      document.getElementById('btnPrev').addEventListener('click', () => go(slideIndex - 1));
+      document.getElementById('btnNext').addEventListener('click', () => go(slideIndex + 1));
 
-        // Auto slide every 5s
-        let carouselTimer = setInterval(() => go(slideIndex + 1), 5000);
+      // Auto slide every 5s
+      let carouselTimer = setInterval(() => go(slideIndex + 1), 5000);
 
-        // Initialize carousel on first load
-        go(0);
+      // Initialize carousel on first load
+      go(0);
 
-        // --- Search input (if present) ---
-        if (searchInput) {
-            searchInput.addEventListener('input', renderProducts);
-        }
+      // --- Search input (if present) ---
+      if (searchInput) {
+          searchInput.addEventListener('input', renderProducts);
+      }
 
-        // --- Initial setup ---
-        renderProducts();
-        cartBadge.textContent = cartCount;
-    </script>
+      // --- Initial setup ---
+      renderProducts();
+      cartBadge.textContent = cartCount;
+  </script>
 
 </body>
 </html>

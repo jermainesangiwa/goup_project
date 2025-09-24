@@ -150,21 +150,25 @@
 
   <!-- Categories -->
   <section class="cats container" id="cats">
-    <div class="cat-card" onclick="window.location.href='grocery food&fruits.php'">
-      <i class="material-icons" style="font-size:40px;color:#2b7a78;">emoji_food_beverage</i>
-      <div class="label">Food & Fruits</div>
+    <div class="cat-card" onclick="window.location.href='grocery food.php'">
+        <i class="material-icons" style="font-size:40px;color:#2b7a78;">fast_food</i>
+        <div class="label">Food</div>
+    </div>
+    <div class="cat-card" onclick="window.location.href='grocery fruits.php'">
+        <i class="material-icons" style="font-size:40px;color:#2b7a78;">Nutrition</i>
+        <div class="label">Fruits</div>
     </div>
     <div class="cat-card" onclick="window.location.href='grocery s&d.php'">
-      <i class="material-icons" style="font-size:40px;color:#2b7a78;">local_drink</i>
-      <div class="label">Snacks & Drinks</div>
+        <i class="material-icons" style="font-size:40px;color:#2b7a78;">local_drink</i>
+        <div class="label">Snacks & Drinks</div>
     </div>
     <div class="cat-card" onclick="window.location.href='grocery stationary.php'">
-      <i class="material-icons" style="font-size:40px;color:#2b7a78;">edit</i>
-      <div class="label">Stationary</div>
+        <i class="material-icons" style="font-size:40px;color:#2b7a78;">edit</i>
+        <div class="label">Stationary</div>
     </div>
-    <div class="cat-card active" onclick="window.location.href='grocery pharmacy.php'">
-      <i class="material-icons" style="font-size:40px;color:#2b7a78;">medical_services</i>
-      <div class="label">Pharmacy</div>
+    <div class="cat-card active" onclick="window.location.href='grocery essentials.php'">
+        <i class="material-icons" style="font-size:40px;color:#2b7a78;">umbrella</i>
+        <div class="label">Essentials</div>
     </div>
   </section>
 
