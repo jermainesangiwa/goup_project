@@ -555,7 +555,7 @@
         </div>
     </section>
 
-    <h3 class="section-title container">Best of Snacks</h3>
+    <h3 class="section-title container">Delicious Food</h3>
     <section class="grid container" id="grid"></section>
 
     <!-- Footer -->

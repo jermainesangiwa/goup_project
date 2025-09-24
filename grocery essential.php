@@ -172,7 +172,7 @@
     </div>
   </section>
 
-  <h3 class="section-title container">Essential Health & First Aid</h3>
+  <h3 class="section-title container">Essentials for everyday stuff</h3>
   <section class="grid container" id="grid"></section>
 
   <!-- Footer -->
