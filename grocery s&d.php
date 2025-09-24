@@ -167,11 +167,11 @@
   <!-- Categories -->
   <section class="cats container" id="cats">
     <div class="cat-card" onclick="window.location.href='grocery food.php'">
-      <i class="material-icons" style="font-size:40px;color:#2b7a78;">fast_food</i>
+      <i class="material-icons" style="font-size:40px;color:#2b7a78;">restaurant</i>
       <div class="label">Food</div>
     </div>
     <div class="cat-card" onclick="window.location.href='grocery fruits.php'">
-      <i class="material-icons" style="font-size:40px;color:#2b7a78;">Nutrition</i>
+      <i class="material-icons" style="font-size:40px;color:#2b7a78;">nutrition</i>
       <div class="label">Fruits</div>
     </div>
     <div class="cat-card active" onclick="window.location.href='grocery s&d.php'">
