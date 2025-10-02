@@ -7,7 +7,7 @@ include("config.php");
 
 // Redirect to store home page if already logged in
 if (isset($_SESSION['store_id'])) {
-    header("Location: store_home.html");
+    header("Location: seller dashboard.php");
     exit();
 }
 
@@ -42,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['email'] = $email;
 
             // Redirect to store home page
-            header("Location: store_home.html");
+            header("Location: seller dashboard.php");
             exit();
         } else {
             $error = "Invalid email or password."; // Incorrect password
