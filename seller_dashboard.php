@@ -156,7 +156,7 @@
     <div><strong>Aisle 24/7</strong> - Seller Dashboard</div>
     <div>
         Logged in as <strong><?php echo htmlspecialchars($storeInfo['store_name'] ?? 'Store'); ?></strong>
-        <a href="store_logout.php" class="btn" style="margin-left:14px">Logout</a>
+        <a href="seller_logout.php" class="btn" style="margin-left:14px">Logout</a>
     </div>
 </header>
 
