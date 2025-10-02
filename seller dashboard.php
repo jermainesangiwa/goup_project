@@ -240,7 +240,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Price (₦ / currency)</label>
+                        <label>Price (₹ / currency)</label>
                         <input type="number" step="0.01" name="price" required>
                     </div>
                 </div>
