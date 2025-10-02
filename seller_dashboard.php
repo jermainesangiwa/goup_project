@@ -167,7 +167,7 @@
         <a href="?page=add">Add Product</a>
         <a href="?page=orders">Orders</a>
         <a href="reset_password.php">Change Password</a>
-        <a href="store_logout.php">Logout</a>
+        <a href="seller_logout.php">Logout</a>
     </nav>
 
     <main class="content">
