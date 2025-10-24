@@ -204,7 +204,7 @@
                             </td>
                             <td><?php echo htmlspecialchars($row['product_name']); ?></td>
                             <td><?php echo htmlspecialchars($row['category']); ?></td>
-                            <td>$<?php echo number_format((float)$row['price'], 2); ?></td>
+                            <td>₹<?php echo number_format((float)$row['price'], 2); ?></td>
                             <td><?php echo (int)$row['quantity']; ?></td>
                             <td>
                                 <!-- placeholders for edit/delete features -->
