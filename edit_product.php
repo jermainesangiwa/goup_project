@@ -86,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // If no errors, update the product
     if (empty($errors)) {
-        $update_sql = "UPDATE products 
+        $update_sql = "UPDATE Products 
                        SET product_name = ?, category = ?, price = ?, product_image = ?, quantity = ? 
                        WHERE product_id = ? AND store_id = ?";
         $update_stmt = $conn->prepare($update_sql);
