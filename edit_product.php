@@ -9,11 +9,16 @@ if (!isset($_SESSION['store_id'])) {
 }
 $store_id = $_SESSION['store_id'];
 
-// GET product ID
-if(!isset($_GET['product_id']) || !ctype_digit($_GET['product_id'])) {
+// Validate and read product ID from the query string (?product_id=123)
+$product_id = filter_input(INPUT_GET, 'product_id', FILTER_VALIDATE_INT, [
+    'options' => ['min_range' => 1]
+]);
+
+if ($product_id === false || $product_id === null) {
     http_response_code(400);
     die("Invalid product ID.");
 }
+
 $product_id = $_GET['product_id'];
 
 // Fetch products, ensure it belongs to the logged-in seller

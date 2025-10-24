@@ -208,7 +208,7 @@
                             <td><?php echo (int)$row['quantity']; ?></td>
                             <td>
                                 <!-- placeholders for edit/delete features -->
-                                <a href="edit_product.php?id=<?php echo (int)$row['product_id']; ?>" class="btn" style="background:#eee;color:#000">Edit</a>
+                                <a class="btn" href="edit_product.php?product_id=<?= (int)$row['product_id'] ?>">Edit</a>
                                 <a href="delete_product.php?id=<?php echo (int)$row['product_id']; ?>" class="btn" style="background:#f66;color:#fff" onclick="return confirm('Delete this product?')">Delete</a>
                             </td>
                         </tr>
