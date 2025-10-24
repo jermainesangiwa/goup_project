@@ -30,7 +30,7 @@ $sql = "SELECT
             product_image, 
             quantity,
             store_id 
-        FROM products 
+        FROM Products 
         WHERE product_id = ? AND store_id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("ii", $product_id, $store_id);
