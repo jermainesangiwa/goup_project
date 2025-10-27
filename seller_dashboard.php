@@ -209,7 +209,12 @@
                             <td>
                                 <!-- placeholders for edit/delete features -->
                                 <a class="btn" href="edit_product.php?product_id=<?= (int)$row['product_id'] ?>">Edit</a>
-                                <a href="delete_product.php?id=<?php echo (int)$row['product_id']; ?>" class="btn" style="background:#f66;color:#fff" onclick="return confirm('Delete this product?')">Delete</a>
+                                <a href="delete_product.php?id=<?php echo (int)$row['product_id']; ?>"
+                                    class="btn" 
+                                    style="background:#ff4d4f;color:#fff;margin-left:8px"
+                                    onclick="return confirm('Are you sure you want to delete this product?');">
+                                    Delete
+                                </a>
                             </td>
                         </tr>
                     <?php endwhile; ?>
