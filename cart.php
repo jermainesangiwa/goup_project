@@ -2,36 +2,64 @@
 session_start();
 include("config.php");
 
-// Handle quantity updates & removal
+/**
+ * Normalize the session cart so each line has:
+ * id, name, img, price, qty
+ */
+if (!isset($_SESSION['cart']) || !is_array($_SESSION['cart'])) {
+    $_SESSION['cart'] = [];
+}
+$normalized = [];
+foreach ($_SESSION['cart'] as $it) {
+    $normalized[] = [
+        'id'    => isset($it['id']) ? (int)$it['id'] : (isset($it['product_id']) ? (int)$it['product_id'] : 0),
+        'name'  => isset($it['name']) ? (string)$it['name'] : (isset($it['product_name']) ? (string)$it['product_name'] : 'Item'),
+        'img'   => !empty($it['img']) ? (string)$it['img'] : (!empty($it['product_image']) ? (string)$it['product_image'] : 'assets/placeholder.png'),
+        'price' => isset($it['price']) ? (float)$it['price'] : (isset($it['unit_price']) ? (float)$it['unit_price'] : 0.0),
+        'qty'   => isset($it['qty']) ? max(1, (int)$it['qty']) : 1,
+    ];
+}
+$_SESSION['cart'] = $normalized;
+
+/** Handle quantity updates & removal (after normalization) */
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['action'], $_POST['idx']) && ctype_digit((string)$_POST['idx'])) {
         $idx = (int)$_POST['idx'];
-        if (!empty($_SESSION['cart'][$idx])) {
-            if ($_POST['action'] === 'inc') $_SESSION['cart'][$idx]['qty']++;
-            if ($_POST['action'] === 'dec') $_SESSION['cart'][$idx]['qty'] = max(1, $_SESSION['cart'][$idx]['qty'] - 1);
-            if ($_POST['action'] === 'remove') array_splice($_SESSION['cart'], $idx, 1);
+        if (isset($_SESSION['cart'][$idx])) {
+            if ($_POST['action'] === 'inc') {
+                $_SESSION['cart'][$idx]['qty'] = (int)$_SESSION['cart'][$idx]['qty'] + 1;
+            } elseif ($_POST['action'] === 'dec') {
+                $_SESSION['cart'][$idx]['qty'] = max(1, (int)$_SESSION['cart'][$idx]['qty'] - 1);
+            } elseif ($_POST['action'] === 'remove') {
+                array_splice($_SESSION['cart'], $idx, 1);
+            }
         }
         header("Location: cart.php");
         exit;
     }
 }
 
-// Calculate totals
-$cart = $_SESSION['cart']; // now normalized
+$cart = $_SESSION['cart']; // normalized
 
+/** Totals */
 $subtotal = 0.0;
 foreach ($cart as $line) {
-    $qty = isset($line['qty']) ? (int)$line['qty'] : 1;
+    $qty   = isset($line['qty']) ? (int)$line['qty'] : 1;
     $price = isset($line['price']) ? (float)$line['price'] : 0.0;
     $subtotal += $price * $qty;
 }
+$delivery = $subtotal > 0 ? 80.00 : 0.00;   // set your shipping rule here
+$total    = $subtotal + $delivery;
 
-// Helper for quantity buttons
+/** Helper for quantity buttons */
 function actionBtn($idx, $what, $label) {
+    $idx  = (int)$idx;
+    $what = htmlspecialchars($what, ENT_QUOTES, 'UTF-8');
+    $labelSafe = htmlspecialchars($label, ENT_QUOTES, 'UTF-8');
     return '<form method="post" style="display:inline">
               <input type="hidden" name="idx" value="'.$idx.'">
               <input type="hidden" name="action" value="'.$what.'">
-              <button class="qty-btn" type="submit">'.$label.'</button>
+              <button class="qty-btn" type="submit">'.$labelSafe.'</button>
             </form>';
 }
 ?>
@@ -59,13 +87,11 @@ function actionBtn($idx, $what, $label) {
     .wrap{max-width:820px;margin:20px auto;padding:0 16px}
     .card{background:var(--panel);border:1px solid var(--soft);border-radius:16px;box-shadow:var(--shadow);overflow:hidden}
 
-    /* Header */
     .header{display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--panel);border-bottom:1px solid var(--soft)}
     .back{display:inline-grid;place-items:center;width:36px;height:36px;border-radius:999px;background:rgba(0,0,0,.08)}
     .back::before{content:"";width:8px;height:8px;border:2px solid var(--ink);border-right:none;border-bottom:none;transform:rotate(-45deg)}
     .title{font-weight:600;font-size:20px;margin-left:4px}
 
-    /* Product list */
     .list{padding:16px}
     .item{display:flex;gap:14px;align-items:center;padding:12px;border:1px solid var(--soft);border-radius:12px;margin-bottom:12px}
     .thumb{width:84px;height:72px;border-radius:8px;overflow:hidden;background:#eee;flex-shrink:0}
@@ -77,16 +103,13 @@ function actionBtn($idx, $what, $label) {
     .qty{min-width:20px;text-align:center;font-weight:600}
     .line-total{font-weight:600}
 
-    /* Empty state */
     .empty{padding:20px;margin:20px 0;border-radius:12px;background:#f3f4f6;color:#374151;border:1px dashed #d1d5db;text-align:center}
     .empty a{color:#111;text-decoration:underline}
 
-    /* Summary */
     .summary{padding:12px 16px;border-top:1px solid var(--soft)}
     .row{display:flex;justify-content:space-between;padding:8px 0;color:#111}
     .row.total{font-weight:700;border-top:1px solid var(--soft);margin-top:8px}
 
-    /* Checkout bar */
     .checkout-bar{position:sticky;bottom:0;background:var(--panel);border-top:1px solid var(--soft);display:flex;justify-content:space-between;align-items:center;padding:12px 16px}
     .to{color:var(--muted);font-size:13px}
     .btn{background:var(--brand);border:none;color:#000;font-weight:700;padding:12px 18px;border-radius:10px;cursor:pointer}
@@ -107,25 +130,32 @@ function actionBtn($idx, $what, $label) {
     </div>
 
     <div class="list">
-      <?php if (!$cart): ?>
+      <?php if (empty($cart)): ?>
         <div class="empty">
           <strong>Your cart is empty.</strong><br>
           <a href="grocery essentials.php">Return to shop</a>
         </div>
       <?php else: ?>
         <?php foreach ($cart as $i => $line): ?>
+          <?php
+            $img   = htmlspecialchars($line['img']   ?? 'assets/placeholder.png');
+            $name  = htmlspecialchars($line['name']  ?? 'Item');
+            $qty   = (int)($line['qty']   ?? 1);
+            $price = (float)($line['price'] ?? 0);
+            $lineTotal = $price * $qty;
+          ?>
           <article class="item">
-            <div class="thumb"><img src="<?=htmlspecialchars($line['img'])?>" alt=""></div>
+            <div class="thumb"><img src="<?=$img?>" alt=""></div>
             <div class="meta">
-              <div class="name"><?=htmlspecialchars($line['name'])?></div>
+              <div class="name"><?=$name?></div>
               <div class="controls">
                 <?=actionBtn($i,'dec','−')?>
-                <div class="qty"><?=$line['qty']?></div>
+                <div class="qty"><?=$qty?></div>
                 <?=actionBtn($i,'inc','+')?>
                 <?=actionBtn($i,'remove','🗑')?>
               </div>
             </div>
-            <div class="line-total">₹<?=number_format($line['price'] * $line['qty'], 2)?></div>
+            <div class="line-total">₹<?=number_format($lineTotal, 2)?></div>
           </article>
         <?php endforeach; ?>
       <?php endif; ?>
