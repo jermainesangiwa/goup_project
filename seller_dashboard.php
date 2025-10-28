@@ -107,7 +107,7 @@
     // Count of Orders for this seller
     $newOrdersSql = "SELECT COUNT(DISTINCT o.order_id) AS order_count
                      FROM Orders o
-                     JOIN OrderItems oi ON o.order_id = oi.order_id
+                     JOIN Order_Items oi ON o.order_id = oi.order_id
                      WHERE oi.store_id = ?
                         AND o.payment_status IN ('Pending', 'Paid', 'Refunded')";
     $newOrderStmt = $conn->prepare($newOrdersSql);
