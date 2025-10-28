@@ -104,6 +104,20 @@
     $storeInfo = $storeResult->fetch_assoc();
     $storeStmt->close();
 
+    // Count of Orders for this seller
+    $newOrdersSql = "SELECT COUNT(DISTINCT o.order_id) AS order_count
+                     FROM Orders o
+                     JOIN OrderItems oi ON o.order_id = oi.order_id
+                     WHERE oi.store_id = ?
+                        AND o.payment_status IN ('Pending', 'Paid', 'Refunded')";
+    $newOrderStmt = $conn->prepare($newOrdersSql);
+    $newOrderStmt->bind_param("i", $storeId);
+    $newOrderStmt->execute();
+    $newOrderResult = $newOrderStmt->get_result();
+    $newOrdersCount = $newOrderResult->fetch_assoc();
+    $newOrdersCount = (int)($newOrdersCount['order_count'] ?? 0);
+    $newOrderStmt->close();
+
     // Fetch products for this seller
     $productSql = "SELECT product_id, product_name, category, price, product_image, quantity FROM Products WHERE store_id = ? ORDER BY product_id DESC";
     $pstmt = $conn->prepare($productSql);
@@ -111,6 +125,7 @@
     $pstmt->execute();
     $products = $pstmt->get_result();
 ?>
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -130,6 +145,7 @@
         .sidebar h3{margin:0 0 14px}
         .sidebar a{display:block;padding:10px;border-radius:6px;color:#fff;text-decoration:none;margin-bottom:8px;background:rgba(255,255,255,0.04)}
         .sidebar a.active{background:var(--accent);color:#000;font-weight:700}
+        .badge{display:inline-block;min-width:20px;padding:2px 6px;font-size:12px;line-height:1;border-radius:999px;background:#ff4d4f;color:#fff;text-align:center;vertical-align:middle;margin-left:8px;font-weight:700;}
         .content{flex:1;padding:28px;background:#fff}
         h2{margin-top:0}
         table{width:100%;border-collapse:collapse;margin-bottom:18px}
@@ -165,12 +181,26 @@
         <h3>Menu</h3>
         <a href="?page=products" class="active">My Products</a>
         <a href="?page=add">Add Product</a>
-        <a href="?page=orders">Orders</a>
+        <a href="?page=orders">
+            Orders
+            <?php if ($newOrdersCount > 0): ?>
+                <span class="badge"><?php echo $newOrdersCount; ?></span>
+            <?php endif; ?>
+        </a>
         <a href="reset_password.php">Change Password</a>
         <a href="seller_logout.php">Logout</a>
     </nav>
 
     <main class="content">
+        <!-- Toast/status when there are new orders -->
+         <?php if (!isset($_GET['page']) || $_GET['page'] === 'products'): ?>
+            <?php if ($newOrdersCount > 0): ?>
+                <div class="messages">
+                    <div class="success">You have <?php echo $newOrdersCount; ?> new order(s) awaiting review in the <a href="?page=orders">Orders</a> tab.</div>
+                </div>
+            <?php endif; ?>
+        <?php endif; ?>
+
         <!-- show deletion message if applicable -->
         <?php if (isset($_GET['msg']) && $_GET['msg'] === 'deleted'): ?>
         <div class="status success">Product deleted successfully.</div>
@@ -279,10 +309,22 @@
             </form>
 
         <?php elseif ($page === 'orders'): ?>
+            $markSeenSql = "
+                UPDATE Order_Items oi
+                JOIN Orders o ON o.order_id = oi.order_id
+                SET oi.seller_seen = 1
+                WHERE oi.store_id = ?
+                    AND o.payment_status IN ('Pending', 'Paid', 'Refunded')
+                    AND (oi.seller_seen IS NULL OR oi.seller_seen = 0)
+            ";
+            $markSeenStmt = $conn->prepare($markSeenSql);
+            $markSeenStmt->bind_param("i", $storeId);
+            $markSeenStmt->execute();
+            $markSeenStmt->close();
+
             <h2>Orders</h2>
             <p>Order tracking and management will go here (you can show orders that include products with this store_id).</p>
             <p>Suggested: show order id, customer name, items, total, status, and actions (mark shipped, cancel).</p>
-
         <?php else: ?>
             <h2>Dashboard</h2>
             <p>Select an item from the menu.</p>
