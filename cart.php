@@ -5,7 +5,36 @@ session_start();
 // Connect to the database via config.php
 include("config.php");
 
+// Handle qty updates and deletes
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['action'], $_POST['idx']) && ctype_digit((string)$_POST['idx'])) {
+        $idx = (int)$_POST['idx'];
+        if (!empty($_SESSION['cart'][$idx])) {
+            if ($_POST['action'] === 'inc')      $_SESSION['cart'][$idx]['qty']++;
+            if ($_POST['action'] === 'dec')      $_SESSION['cart'][$idx]['qty'] = max(1, $_SESSION['cart'][$idx]['qty'] - 1);
+            if ($_POST['action'] === 'remove')   array_splice($_SESSION['cart'], $idx, 1);
+        }
+        header("Location: cart.php");
+        exit;
+    }
+}
 
+$cart = $_SESSION['cart'] ?? [];
+$subtotal = 0.0;
+foreach ($cart as $line) {
+    $subtotal += $line['price'] * $line['qty'];
+}
+$delivery = 0.00; // flat shipping mock
+$total = $subtotal + $delivery;
+
+// Small helper to post actions
+function actionBtn($idx, $what, $label) {
+    return '<form method="post" style="display:inline">
+              <input type="hidden" name="idx" value="'.$idx.'">
+              <input type="hidden" name="action" value="'.$what.'">
+              <button class="quantity-btn" type="submit">'.$label.'</button>
+            </form>';
+}
 ?>
 
 <!DOCTYPE html>
