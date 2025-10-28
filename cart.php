@@ -48,7 +48,7 @@ foreach ($cart as $line) {
     $price = isset($line['price']) ? (float)$line['price'] : 0.0;
     $subtotal += $price * $qty;
 }
-$delivery = $subtotal > 0 ? 80.00 : 0.00;   // set your shipping rule here
+$delivery = $subtotal > 0 ? 10.00 : 0.00;   // set your shipping rule here
 $total    = $subtotal + $delivery;
 
 /** Helper for quantity buttons */
