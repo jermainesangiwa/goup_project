@@ -758,86 +758,48 @@ function actionBtn($idx, $what, $label) {
 </head>
 <body>
     <div class="cart-container">
-        <!-- Loading Animation -->
-        <div class="loading" id="loading"></div>
-        
-        <!-- Success Message -->
-        <div class="success-message" id="successMessage">
-            Order Placed Successfully! 🎉
-        </div>
-
-        <!-- Header Section -->
         <header class="header">
-            <div class="back-button" onclick="goBack()">
-                <div class="back-arrow"></div>
-            </div>
+            <a class="back-button" href="javascript:history.back()"><div class="back-arrow"></div></a>
             <h1 class="cart-title">My Cart</h1>
             <div class="header-spacer"></div>
         </header>
 
-        <!-- Product Item Section -->
         <div class="product-section">
+            <?php if (!$cart): ?>
+            <div class="product-item"><div class="product-details"><h3 class="product-name">Your cart is empty.</h3></div></div>
+            <?php else: ?>
+            <?php foreach ($cart as $i => $line): ?>
             <div class="product-item">
                 <div class="product-image">
-                    <img src="https://via.placeholder.com/100x80/9D9D9D/FFFFFF?text=Pencil" alt="Pencil" />
+                <img src="<?=htmlspecialchars($line['img'])?>" alt="">
                 </div>
                 <div class="product-details">
-                    <h3 class="product-name">Pencil</h3>
-                    <div class="quantity-controls">
-                        <button class="quantity-btn minus" onclick="updateQuantity(-1)">-</button>
-                        <span class="quantity" id="quantity">1</span>
-                        <button class="quantity-btn plus" onclick="updateQuantity(1)">+</button>
-                    </div>
+                <h3 class="product-name"><?=htmlspecialchars($line['name'])?></h3>
+                <div class="quantity-controls">
+                    <?=actionBtn($i,'dec','-')?>
+                    <span class="quantity"><?=$line['qty']?></span>
+                    <?=actionBtn($i,'inc','+')?>
+                    <?=actionBtn($i,'remove','🗑')?>
                 </div>
-                <div class="product-price" id="productPrice">$0.50</div>
+                </div>
+                <div class="product-price">₹<?=number_format($line['price'] * $line['qty'], 2)?></div>
             </div>
+            <br>
+            <?php endforeach; ?>
+            <?php endif; ?>
         </div>
 
-        <!-- Navigation Sections -->
-        <div class="nav-sections">
-            <div class="nav-item" onclick="showSection('offers')">
-                <span class="nav-text">Offers</span>
-                <div class="nav-underline"></div>
-            </div>
-            <div class="nav-item" onclick="showSection('summary')">
-                <span class="nav-text">Order Summary</span>
-                <div class="nav-underline"></div>
-            </div>
-            <div class="nav-item" onclick="showSection('address')">
-                <span class="nav-text">Address</span>
-                <div class="nav-underline"></div>
-            </div>
-        </div>
-
-        <!-- Order Summary Section -->
         <div class="order-summary">
-            <div class="summary-item">
-                <span class="summary-label">Order</span>
-                <span class="summary-value" id="orderTotal">$0.50</span>
-            </div>
-            <div class="summary-item">
-                <span class="summary-label">Delivery</span>
-                <span class="summary-value" id="deliveryFee">$0</span>
-            </div>
-            <div class="summary-item total">
-                <span class="summary-label">Total</span>
-                <span class="summary-value" id="grandTotal">$0.50</span>
-            </div>
+            <div class="summary-item"><span class="summary-label">Subtotal</span><span class="summary-value">₹<?=number_format($subtotal,2)?></span></div>
+            <div class="summary-item"><span class="summary-label">Delivery</span><span class="summary-value">₹<?=number_format($delivery,2)?></span></div>
+            <div class="summary-item total"><span class="summary-label">Total</span><span class="summary-value">₹<?=number_format($total,2)?></span></div>
         </div>
 
-        <!-- Add Code Section -->
-        <div class="add-code-section">
-            <span class="add-code-text" onclick="showPromoCode()">Add code</span>
-            <div class="add-code-underline"></div>
-        </div>
+        <div class="address-section"><span class="address-text">Deliver to: (add on next step)</span></div>
 
-        <!-- Address Section -->
-        <div class="address-section">
-            <span class="address-text" onclick="editAddress()">Sukna hostel</span>
-        </div>
-
-        <!-- Checkout Button -->
-        <button class="checkout-btn" onclick="checkout()">Check Out</button>
+        <form action="checkout.php" method="get" style="position:absolute; left:50%; transform:translateX(-50%); bottom:20px;">
+            <button class="checkout-btn" type="submit" <?=empty($cart)?'disabled style="opacity:.5"':''?>>Check Out</button>
+        </form>
     </div>
 
     <script>
