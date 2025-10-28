@@ -119,12 +119,12 @@
           <div class="search-btn"><i class="material-icons">search</i></div>
         </div>
       </div>
-      <div class="cart-wrap" onclick="openCart('cart.php')">
-        <div class="cart-icon">
-          <i class="material-icons">shopping_cart</i>
-          <span id="cartBadge" class="cart-badge">0</span>
-        </div>
-        <div class="cart-text">Cart</div>
+      <div class="cart-wrap">
+          <div class="cart-icon">
+              <i class="material-icons">shopping_cart</i>
+              <span id="cartBadge" class="cart-badge">0</span>
+          </div>
+          <div class="cart-text">Cart</div>
       </div>
       <div class="auth">
         <?php if (isset($_SESSION['user_id']) && isset($_SESSION['first_name'])): ?>
