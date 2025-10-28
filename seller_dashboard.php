@@ -309,22 +309,72 @@
             </form>
 
         <?php elseif ($page === 'orders'): ?>
-            $markSeenSql = "
-                UPDATE Order_Items oi
-                JOIN Orders o ON o.order_id = oi.order_id
-                SET oi.seller_seen = 1
-                WHERE oi.store_id = ?
-                    AND o.payment_status IN ('Pending', 'Paid', 'Refunded')
+            <?php
+                // Mark all items in orders for this seller as seen when the Orders tab is opened
+                $markSeenSql = "
+                    UPDATE Order_Items oi
+                    JOIN Products p ON p.product_id = oi.product_id
+                    JOIN Orders   o ON o.order_id = oi.order_id
+                    SET oi.seller_seen = 1
+                    WHERE p.store_id = ?
+                    AND o.payment_status IN ('Pending','Paid','Refunded')
                     AND (oi.seller_seen IS NULL OR oi.seller_seen = 0)
-            ";
-            $markSeenStmt = $conn->prepare($markSeenSql);
-            $markSeenStmt->bind_param("i", $storeId);
-            $markSeenStmt->execute();
-            $markSeenStmt->close();
+                ";
+                $markSeenStmt = $conn->prepare($markSeenSql);
+                $markSeenStmt->bind_param("i", $storeId);
+                $markSeenStmt->execute();
+                $markSeenStmt->close();
 
+                // Fetch orders for this seller
+                $ordersSql = "
+                    SELECT 
+                        o.order_id,
+                        o.order_date,
+                        o.status,
+                        o.payment_status,
+                        SUM(oi.quantity * oi.price) AS total,
+                        GROUP_CONCAT(CONCAT(oi.product_name,' ×', oi.quantity) ORDER BY oi.order_item_id SEPARATOR ', ') AS items
+                    FROM Orders o
+                    JOIN Order_Items oi ON oi.order_id = o.order_id
+                    JOIN Products p     ON p.product_id = oi.product_id
+                    WHERE p.store_id = ?
+                    GROUP BY o.order_id, o.order_date, o.status, o.payment_status
+                    ORDER BY o.order_id DESC
+                ";
+                $ordersStmt = $conn->prepare($ordersSql);
+                $ordersStmt->bind_param("i", $storeId);
+                $ordersStmt->execute();
+                $orders = $ordersStmt->get_result();
+            ?>
             <h2>Orders</h2>
-            <p>Order tracking and management will go here (you can show orders that include products with this store_id).</p>
-            <p>Suggested: show order id, customer name, items, total, status, and actions (mark shipped, cancel).</p>
+            <table>
+            <thead>
+                <tr>
+                <th>Order #</th>
+                <th>Date</th>
+                <th>Items</th>
+                <th>Status</th>
+                <th>Payment</th>
+                <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if ($orders->num_rows === 0): ?>
+                <tr><td colspan="6">No orders yet.</td></tr>
+                <?php else: ?>
+                <?php while ($row = $orders->fetch_assoc()): ?>
+                    <tr>
+                    <td><?= (int)$row['order_id'] ?></td>
+                    <td><?= htmlspecialchars($row['order_date']) ?></td>
+                    <td><?= htmlspecialchars($row['items']) ?></td>
+                    <td><?= htmlspecialchars($row['status']) ?></td>
+                    <td><?= htmlspecialchars($row['payment_status']) ?></td>
+                    <td>₹<?= number_format((float)$row['total'], 2) ?></td>
+                    </tr>
+                <?php endwhile; ?>
+                <?php endif; ?>
+            </tbody>
+            </table>
         <?php else: ?>
             <h2>Dashboard</h2>
             <p>Select an item from the menu.</p>
