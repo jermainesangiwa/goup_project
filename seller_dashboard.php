@@ -171,6 +171,7 @@
     </nav>
 
     <main class="content">
+        <!-- show deletion message if applicable -->
         <?php if (isset($_GET['msg']) && $_GET['msg'] === 'deleted'): ?>
         <div class="status success">Product deleted successfully.</div>
         <?php endif; ?>

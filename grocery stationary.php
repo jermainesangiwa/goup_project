@@ -264,15 +264,10 @@
         price.textContent = "₹" + Number(p.price).toFixed(2);
 
 
-        const add = document.createElement('button');
+        const add = document.createElement('a');
         add.className = 'add';
-        add.type = 'button';
+        add.href = `add_to_cart.php?product_id=${encodeURIComponent(p.id)}`;
         add.textContent = 'Add to cart';
-        add.addEventListener('click', () => {
-            cartCount += 1;
-            cartBadge.textContent = String(cartCount);
-            showToast(`${p.name} added to cart`);
-        });
 
         meta.appendChild(name);
         meta.appendChild(price);
