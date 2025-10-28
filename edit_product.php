@@ -334,7 +334,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         >
                         <?php if (!empty($product['product_image'])): ?>
                         <span class="preview">
-                            <img src="<?php echo htmlspecialchars($product['product_image']); ?>" alt="Current Image">
+                            <img src="<?= htmlspecialchars($line['img'] ?? 'assets/placeholder.png') ?>" alt="">
+                            <h3 class="product-name"><?= htmlspecialchars($line['name'] ?? 'Item') ?></h3>
+                            <span class="quantity"><?= (int)($line['qty'] ?? 1) ?></span>
+                            <div class="product-price">₹<?= number_format(((float)($line['price'] ?? 0)) * ((int)($line['qty'] ?? 1)), 2) ?></div>
                         </span>
                         <?php endif; ?>
                     </div>

@@ -17,11 +17,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // Calculate totals
-$cart = $_SESSION['cart'] ?? [];
+$cart = $_SESSION['cart']; // now normalized
+
 $subtotal = 0.0;
-foreach ($cart as $line) $subtotal += $line['price'] * $line['qty'];
-$delivery = 0.00;
-$total = $subtotal + $delivery;
+foreach ($cart as $line) {
+    $qty = isset($line['qty']) ? (int)$line['qty'] : 1;
+    $price = isset($line['price']) ? (float)$line['price'] : 0.0;
+    $subtotal += $price * $qty;
+}
 
 // Helper for quantity buttons
 function actionBtn($idx, $what, $label) {

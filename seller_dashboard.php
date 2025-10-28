@@ -3,6 +3,23 @@
     session_start();
     include('config.php'); // your DB connection in $conn
 
+    // --- Normalize session cart items to a consistent shape ---
+    $_SESSION['cart'] = isset($_SESSION['cart']) && is_array($_SESSION['cart']) ? $_SESSION['cart'] : [];
+
+    $normalized = [];
+    foreach ($_SESSION['cart'] as $it) {
+        $normalized[] = [
+            'id'    => $it['id']    ?? ($it['product_id'] ?? null),
+            'name'  => $it['name']  ?? ($it['product_name'] ?? 'Item'),
+            'img'   => $it['img']   ?? ($it['product_image'] ?? 'assets/placeholder.png'),
+            'price' => isset($it['price'])
+                        ? (float)$it['price']
+                        : (isset($it['unit_price']) ? (float)$it['unit_price'] : 0.0),
+            'qty'   => isset($it['qty']) ? max(1, (int)$it['qty']) : 1,
+        ];
+    }
+    $_SESSION['cart'] = $normalized;
+
     // Require seller login
     if (!isset($_SESSION['store_id'])) {
         header('Location: store_login.php');

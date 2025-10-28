@@ -1,47 +1,48 @@
 <?php
-session_start();
-include('config.php');
+    session_start();
+    require 'config.php';
 
-
-if(!isset($_GET['product_id']) || !ctype_digit($_GET['product_id'])) {
-    exit('Invalid Product');
-}
-$product_id = (int)$_GET['product_id'];
-
-$sql = "SELECT product_id, product_name, price, product_image, store_id FROM Products WHERE product_id = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $product_id);
-$stmt->execute();
-$result = $stmt->get_result();
-$p = $result->fetch_assoc();
-
-if(!$p) {
-    exit('Product not found');
-}
-
-if(!isset($_SESSION['cart'])) $_SESSION['cart'] = [];
-
-$found = false;
-foreach($_SESSION['cart'] as &$item) {
-    if($item['product_id'] === (int)$p['product_id']){
-        $item['quantity']++;
-        $found = true;
-        break;
+    $productId = isset($_GET['product_id']) ? (int)$_GET['product_id'] : 0;
+    if ($productId <= 0) {
+        header('Location: cart.php');
+        exit;
     }
-}
-unset($item);
 
-if(!$found) {
-    $_SESSION['cart'][] = [
-        'product_id' => (int)$p['product_id'],
-        'store_id' => (int)$p['store_id'],
-        'product_name' => $p['product_name'],
-        'price' => (float)$p['price'],
-        'product_image' => $p['product_image'],
-        'quantity' => 1
-    ];
-}
+    // fetch product
+    $stmt = $conn->prepare("SELECT product_id, product_name, price, product_image FROM Products WHERE product_id = ?");
+    $stmt->bind_param("i", $productId);
+    $stmt->execute();
+    $res = $stmt->get_result();
+    if (!$res || $res->num_rows === 0) {
+        header('Location: cart.php');
+        exit;
+    }
+    $p = $res->fetch_assoc();
+    $stmt->close();
 
-header("Location: cart.php");
-exit;
+    $_SESSION['cart'] = isset($_SESSION['cart']) && is_array($_SESSION['cart']) ? $_SESSION['cart'] : [];
+
+    // if already in cart, increment qty
+    $found = false;
+    foreach ($_SESSION['cart'] as &$line) {
+        if ((int)($line['id'] ?? 0) === (int)$p['product_id']) {
+            $line['qty'] = isset($line['qty']) ? ((int)$line['qty'] + 1) : 2;
+            $found = true;
+            break;
+        }
+    }
+    unset($line);
+
+    if (!$found) {
+        $_SESSION['cart'][] = [
+            'id'    => (int)$p['product_id'],
+            'name'  => (string)$p['product_name'],
+            'img'   => $p['product_image'] ?: 'assets/placeholder.png',
+            'price' => (float)$p['price'],
+            'qty'   => 1,
+        ];
+    }
+
+    header('Location: cart.php');
+    exit;
 ?>
