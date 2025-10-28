@@ -2,6 +2,14 @@
     session_start();
     include("config.php"); // DB connection
 
+    // Cart count for badge
+    $cartCount = 0;
+    if (!empty($_SESSION['cart'])){
+        foreach ($_SESSION['cart'] as $qty){
+            $cartCount += (int)($qty['qty'] ?? 0);
+        }
+    }
+
     // Fetch products from DB
     $sql = "SELECT product_id, product_name, category, price, product_image FROM Products";
     $result = $conn->query($sql);
@@ -496,10 +504,10 @@
             </div>
 
             <!-- Cart -->
-            <div class="cart-wrap">
+            <div class="cart-wrap" onclick="window.location.href='cart.php'">
                 <div class="cart-icon">
                     <i class="material-icons">shopping_cart</i>
-                    <span id="cartBadge" class="cart-badge">0</span>
+                    <span id="cartBadge" class="cart-badge"><?php echo (int)($cartCount ?? 0); ?></span>
                 </div>
                 <div class="cart-text">Cart</div>
             </div>
@@ -620,7 +628,8 @@
 
         // Detect default filter from <body data-current-cat="">
         let currentFilter = document.body.dataset.currentCat || 'all';
-        let cartCount = 0;
+        let cartCount = <?php echo (int)($cartCount ?? 0); ?>;
+        document.getElementById('cartBadge').textContent = String(cartCount);
 
         function renderProducts() {
             grid.innerHTML = '';
