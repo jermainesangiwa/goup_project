@@ -327,13 +327,12 @@
 
         <?php elseif ($page === 'orders'): ?>
             <?php
-                // Mark all items in orders for this seller as seen when the Orders tab is opened
+                // mark seller's unseen items as seen when they open Orders
                 $markSeenSql = "
                     UPDATE Order_Items oi
-                    JOIN Products p ON p.product_id = oi.product_id
-                    JOIN Orders   o ON o.order_id = oi.order_id
+                    JOIN Orders o ON o.order_id = oi.order_id
                     SET oi.seller_seen = 1
-                    WHERE p.store_id = ?
+                    WHERE oi.store_id = ?
                     AND o.payment_status IN ('Pending','Paid','Refunded')
                     AND (oi.seller_seen IS NULL OR oi.seller_seen = 0)
                 ";
@@ -342,60 +341,131 @@
                 $markSeenStmt->execute();
                 $markSeenStmt->close();
 
-                // Fetch orders for this seller
+                // IMPORTANT: product_id now lives in Order_Items (not Orders)
                 $ordersSql = "
-                    SELECT 
+                    SELECT
                         o.order_id,
+                        o.user_id,
                         o.order_date,
                         o.status,
+                        o.payment_method,
                         o.payment_status,
-                        SUM(oi.quantity * oi.price) AS total,
-                        GROUP_CONCAT(CONCAT(oi.product_name,' ×', oi.quantity) ORDER BY oi.order_item_id SEPARATOR ', ') AS items
+                        o.shipping_address, o.shipping_city, o.shipping_state, o.shipping_zip, o.shipping_country,
+
+                        oi.order_item_id,
+                        oi.product_id,          -- from Order_Items
+                        oi.quantity,
+                        oi.price,
+                        oi.subtotal,
+
+                        p.product_name,         -- from Products (for display)
+                        p.product_image
                     FROM Orders o
                     JOIN Order_Items oi ON oi.order_id = o.order_id
-                    JOIN Products p     ON p.product_id = oi.product_id
-                    WHERE p.store_id = ?
-                    GROUP BY o.order_id, o.order_date, o.status, o.payment_status
-                    ORDER BY o.order_id DESC
+                    LEFT JOIN Products p ON p.product_id = oi.product_id
+                    WHERE oi.store_id = ?
+                    ORDER BY o.order_id DESC, oi.order_item_id ASC
                 ";
-                $ordersStmt = $conn->prepare($ordersSql);
-                $ordersStmt->bind_param("i", $storeId);
-                $ordersStmt->execute();
-                $orders = $ordersStmt->get_result();
+                $olist = $conn->prepare($ordersSql);
+                $olist->bind_param("i", $storeId);
+                $olist->execute();
+                $res = $olist->get_result();
+
+                // group rows by order_id for display
+                $byOrder = [];
+                while ($r = $res->fetch_assoc()) {
+                    $oid = (int)$r['order_id'];
+                    if (!isset($byOrder[$oid])) {
+                        $byOrder[$oid] = [
+                            'header' => [
+                                'order_id' => $oid,
+                                'user_id' => (int)$r['user_id'],
+                                'order_date' => $r['order_date'],
+                                'status' => $r['status'],
+                                'payment_method' => $r['payment_method'],
+                                'payment_status' => $r['payment_status'],
+                                'shipping_address' => $r['shipping_address'],
+                                'shipping_city' => $r['shipping_city'],
+                                'shipping_state' => $r['shipping_state'],
+                                'shipping_zip' => $r['shipping_zip'],
+                                'shipping_country' => $r['shipping_country'],
+                            ],
+                            'items' => [],
+                            'total' => 0.0,
+                        ];
+                    }
+                    $byOrder[$oid]['items'][] = [
+                        'order_item_id' => (int)$r['order_item_id'],
+                        'product_id'    => (int)$r['product_id'],
+                        'product_name'  => $r['product_name'] ?? 'Product #'.$r['product_id'],
+                        'quantity'      => (int)$r['quantity'],
+                        'price'         => (float)$r['price'],
+                        'subtotal'      => (float)$r['subtotal'],
+                        'product_image' => $r['product_image'] ?? 'assets/placeholder.png',
+                    ];
+                    $byOrder[$oid]['total'] += (float)$r['subtotal'];
+                }
+                $olist->close();
             ?>
+
             <h2>Orders</h2>
-            <table>
-            <thead>
-                <tr>
-                <th>Order #</th>
-                <th>Date</th>
-                <th>Items</th>
-                <th>Status</th>
-                <th>Payment</th>
-                <th>Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php if ($orders->num_rows === 0): ?>
-                <tr><td colspan="6">No orders yet.</td></tr>
-                <?php else: ?>
-                <?php while ($row = $orders->fetch_assoc()): ?>
-                    <tr>
-                    <td><?= (int)$row['order_id'] ?></td>
-                    <td><?= htmlspecialchars($row['order_date']) ?></td>
-                    <td><?= htmlspecialchars($row['items']) ?></td>
-                    <td><?= htmlspecialchars($row['status']) ?></td>
-                    <td><?= htmlspecialchars($row['payment_status']) ?></td>
-                    <td>₹<?= number_format((float)$row['total'], 2) ?></td>
-                    </tr>
-                <?php endwhile; ?>
-                <?php endif; ?>
-            </tbody>
-            </table>
-        <?php else: ?>
-            <h2>Dashboard</h2>
-            <p>Select an item from the menu.</p>
-        <?php endif; ?>
+
+            <?php if (!$byOrder): ?>
+                <p>No orders yet.</p>
+            <?php else: ?>
+                <?php foreach ($byOrder as $oid => $block): ?>
+                    <section style="border:1px solid #eee;border-radius:10px;margin:14px 0;padding:12px">
+                        <div style="display:flex;justify-content:space-between;align-items:center">
+                            <h3 style="margin:0">Order #<?= $oid ?></h3>
+                            <div>
+                                <strong>Status:</strong> <?= htmlspecialchars($block['header']['status']) ?> ·
+                                <strong>Payment:</strong> <?= htmlspecialchars($block['header']['payment_status']) ?>
+                            </div>
+                        </div>
+                        <div style="color:#666;font-size:14px;margin:6px 0">
+                            Placed: <?= htmlspecialchars($block['header']['order_date']) ?> ·
+                            User ID: <?= (int)$block['header']['user_id'] ?> ·
+                            Ship to: <?= htmlspecialchars($block['header']['shipping_address']) ?>,
+                            <?= htmlspecialchars($block['header']['shipping_city']) ?>,
+                            <?= htmlspecialchars($block['header']['shipping_state']) ?>,
+                            <?= htmlspecialchars($block['header']['shipping_zip']) ?>,
+                            <?= htmlspecialchars($block['header']['shipping_country']) ?>
+                        </div>
+
+                        <table style="width:100%;border-collapse:collapse;margin-top:8px">
+                            <thead>
+                                <tr>
+                                    <th style="text-align:left;border-bottom:1px solid #eee;padding:6px">Item</th>
+                                    <th style="text-align:right;border-bottom:1px solid #eee;padding:6px">Qty</th>
+                                    <th style="text-align:right;border-bottom:1px solid #eee;padding:6px">Price</th>
+                                    <th style="text-align:right;border-bottom:1px solid #eee;padding:6px">Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <?php foreach ($block['items'] as $it): ?>
+                                <tr>
+                                    <td style="padding:6px">
+                                        (<?= (int)$it['product_id'] ?>)
+                                        <?= htmlspecialchars($it['product_name']) ?>
+                                    </td>
+                                    <td style="padding:6px;text-align:right"><?= (int)$it['quantity'] ?></td>
+                                    <td style="padding:6px;text-align:right">₹<?= number_format($it['price'], 2) ?></td>
+                                    <td style="padding:6px;text-align:right">₹<?= number_format($it['subtotal'], 2) ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="3" style="padding:6px;text-align:right;font-weight:700">Order Total</td>
+                                    <td style="padding:6px;text-align:right;font-weight:700">₹<?= number_format($block['total'], 2) ?></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </section>
+                <?php endforeach; ?>
+            <?php endif; ?>
+
+        <?php endif; // end orders page ?>
     </main>
 </div>
 </body>
