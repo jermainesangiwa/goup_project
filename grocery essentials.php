@@ -113,7 +113,7 @@
     }
   </style>
 </head>
-<body data-current-cat="essential">
+<body data-current-cat="<?php echo htmlspecialchars($currentCat, ENT_QUOTES); ?>">
   <!-- Header -->
   <header class="topbar">
     <div class="container topbar-content">
@@ -177,23 +177,23 @@
 
   <!-- Categories -->
   <section class="cats container" id="cats">
-    <div class="cat-card" data-cat="food" onclick="window.location.href='grocery food.php'">
+    <div class="cat-card" data-cat="food" onclick="window.location.href='?cat=food'">
         <i class="material-icons" style="font-size:40px;color:#2b7a78;">restaurant</i>
         <div class="label">Food</div>
     </div>
-    <div class="cat-card" data-cat="fruit" onclick="window.location.href='grocery fruits.php'">
+    <div class="cat-card" data-cat="fruit" onclick="window.location.href='?cat=fruit'">
         <i class="material-icons" style="font-size:40px;color:#2b7a78;">fruit_emoji</i>
         <div class="label">Fruits</div>
     </div>
-    <div class="cat-card" data-cat="snack drink" onclick="window.location.href='grocery s&d.php'">
+    <div class="cat-card" data-cat="snack drink" onclick="window.location.href='?cat=snack drink'">
         <i class="material-icons" style="font-size:40px;color:#2b7a78;">local_drink</i>
         <div class="label">Snacks & Drinks</div>
     </div>
-    <div class="cat-card" data-cat="stationary" onclick="window.location.href='grocery stationary.php'">
+    <div class="cat-card" data-cat="stationary" onclick="window.location.href='?cat=stationary'">
         <i class="material-icons" style="font-size:40px;color:#2b7a78;">edit</i>
         <div class="label">Stationary</div>
     </div>
-    <div class="cat-card active" data-cat="essential" onclick="window.location.href='grocery essentials.php'">
+    <div class="cat-card active" data-cat="essential" onclick="window.location.href='?cat=essential'">
         <i class="material-icons" style="font-size:40px;color:#2b7a78;">umbrella</i>
         <div class="label">Essentials</div>
     </div>

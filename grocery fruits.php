@@ -2,6 +2,13 @@
     session_start();
     include("config.php"); // DB connection
 
+    // determine current category from query param, default to 'all'
+    $currentCat = 'all';
+    if (!empty($_GET['cat'])) {
+        $currentCat = strtolower(trim($_GET['cat']));
+    }
+
+
     // Cart count for badge
     $cartCount = 0;
     if (!empty($_SESSION['cart'])){
