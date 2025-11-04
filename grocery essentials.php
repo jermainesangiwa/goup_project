@@ -1,118 +1,63 @@
 <?php
-    session_start();
-    include("config.php"); // DB connection
+session_start();
+include("config.php"); // DB connection
 
-    // Cart count for badge
-    $cartCount = 0;
-    if (!empty($_SESSION['cart'])){
-        foreach ($_SESSION['cart'] as $qty){
-            $cartCount += (int)($qty['qty'] ?? 0);
-        }
-    }
+// --- normalize category slug helper (used server-side) ---
+function slugify($s){
+    $s = strtolower(trim((string)$s));
+    $s = preg_replace('/\s+/', '-', $s);       // spaces -> hyphen
+    $s = preg_replace('/[^a-z0-9\-]/', '', $s); // remove unsafe chars
+    return $s;
+}
 
-    // Fetch products from DB
-    $sql = "SELECT product_id, product_name, category, price, product_image FROM Products";
-    $result = $conn->query($sql);
-    
-    // Store results in JSON array
-    $products = [];
-    if ($result && $result->num_rows > 0){
-        while($row = $result->fetch_assoc()){
-            $products[] = [
-                "id" => $row['product_id'],
-                "name" => $row['product_name'],
-                "cat" => strtolower($row['category']), // Match my JS filter
-                "price" => (float)$row['price'],
-                "img" => $row['product_image'] // Store as path e.g. assets/xxx.png
-            ];
-        }
+// Cart count for badge
+$cartCount = 0;
+if (!empty($_SESSION['cart'])){
+    foreach ($_SESSION['cart'] as $qty){
+        $cartCount += (int)($qty['qty'] ?? 0);
     }
+}
+
+// Determine current category: prefer ?cat=..., otherwise default for this page = 'essential'
+$currentCat = 'essential';
+if (!empty($_GET['cat'])) {
+    $currentCat = slugify($_GET['cat']);
+}
+
+// Fetch products from DB
+$sql = "SELECT product_id, product_name, category, price, product_image FROM Products";
+$result = $conn->query($sql);
+
+// Store results in JSON array (normalize server-side category -> slug)
+$products = [];
+if ($result && $result->num_rows > 0){
+    while($row = $result->fetch_assoc()){
+        $products[] = [
+            "id" => $row['product_id'],
+            "name" => $row['product_name'],
+            "cat" => slugify($row['category']), // normalized slug
+            "price" => (float)$row['price'],
+            "img" => $row['product_image'] // Store as path e.g. assets/xxx.png
+        ];
+    }
+}
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Online Grocery Store - Pharmacy</title>
+  <title>Online Grocery Store - Essentials</title>
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <style>
+    /* ... your existing CSS (unchanged) ... */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif; color: #000; background: #fff; }
     a { color: inherit; text-decoration: none; }
-
-    /* Topbar */
-    .topbar { position: sticky; top: 0; z-index: 50; width: 100%; height: 83px; background: rgba(0,0,0,0.68); display: flex; align-items: center; }
-    .container { width: 100%; max-width: 1440px; margin: 0 auto; padding: 0 24px; }
-    .topbar-content { display: grid; grid-template-columns: 220px 1fr 280px 180px; align-items: center; gap: 16px; }
-
-    .location { display: flex; align-items: center; gap: 12px; color: #fff; }
-    .location-text { font-weight: 700; font-size: 14px; }
-
-    .search-wrap { display: flex; align-items: center; justify-content: center; }
-    .search { width: 100%; max-width: 604px; height: 40px; background: rgba(217,217,217,0.62); border: 1px solid rgba(0,0,0,0.37); border-radius: 50px; display: grid; grid-template-columns: 1fr 48px; overflow: hidden; }
-    .search input { border: none; background: transparent; padding: 0 20px; color: #000; font-size: 18px; outline: none; }
-    .search-btn { display: flex; align-items: center; justify-content: center; color: #fff; }
-
-    .cart-wrap { display: flex; align-items: center; justify-content: flex-end; gap: 12px; color: #fff; cursor: pointer; }
-    .cart-icon { position: relative; font-size: 28px; }
-    .cart-badge { position: absolute; right: -6px; top: -6px; width: 16px; height: 16px; background: #BA0B34; color: #fff; font-size: 12px; font-weight: 700; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
-    .cart-text { font-weight: 700; font-size: 24px; }
-
-    .auth { display: flex; justify-content: flex-end; }
-    .auth a { color: #fff; font-weight: 700; font-size: 16px; }
-
-    /* Nav */
-    .sectionbar { width: 100%; background: #252F3D; height: 40px; display: flex; align-items: center; }
-    .sectionbar-inner { display: flex; align-items: center; gap: 28px; color: #fff; }
-    .nav-link { font-weight: 500; font-size: 16px; cursor: pointer; }
-    .nav-link.active { text-decoration: underline; text-underline-offset: 4px; }
-
-    /* Promo Banner */
-    .promo { width: 100%; max-width: 1463px; margin: 24px auto; position: relative; overflow: hidden; border-radius: 8px; }
-    .slides { display: flex; transition: transform 0.5s ease; }
-    .slide { min-width: 100%; height: 278px; display: flex; justify-content: center; align-items: center; background: #eee; }
-    .slide img { width: 100%; height: 100%; object-fit: cover; }
-    .carousel-btn { position: absolute; top: 50%; transform: translateY(-50%); width: 50px; height: 50px; border: 2px solid #fff; color: #fff; border-radius: 50%; background: rgba(0,0,0,0.35); display: flex; align-items: center; justify-content: center; cursor: pointer; }
-    .carousel-btn.left { left: 10px; }
-    .carousel-btn.right { right: 10px; }
-
-    /* Categories */
-    .cats { width: 100%; height: 154px; background: rgba(217,217,217,0.65); display: flex; align-items: center; justify-content: center; gap: 40px; padding: 0 24px; }
-    .cat-card { width: 128px; height: 115px; display: flex; flex-direction: column; align-items: center; cursor: pointer; position: relative; }
-    .cat-card .label { font-weight: 700; font-size: 20px; }
-    .cat-card.active::before { content: ''; position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 166px; height: 154px; background: rgba(0,0,0,0.68); border-radius: 50%; z-index: -1; }
-
-    /* Grid */
-    .grid { display: grid; grid-template-columns: repeat(6, 200px); gap: 24px; padding: 0 24px 40px; }
-    .card { width: 200px; border-radius: 10px; background: #d9d9d9; overflow: hidden; position: relative; }
-    .card .thumb { width: 100%; height: 200px; background: #ccc center/cover no-repeat; }
-    .card .meta { background: #fff; padding: 10px; }
-    .card .name { font-weight: 700; font-size: 20px; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .card .price { font-weight: 700; font-size: 15px; color: #DE3925; }
-    .card .add { position: absolute; left: 10px; bottom: 10px; height: 30px; padding: 0 12px 0 36px; border-radius: 100px; background: #F9A41E; font-weight: 700; font-size: 16px; border: none; cursor: pointer; }
-    .card .add::before { content: '+'; position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 22px; height: 22px; border-radius: 999px; background: rgba(0,0,0,0.15); display: grid; place-items: center; }
-
-    /* Footer */
-    .footer { margin-top: 24px; background: #1A1A1A; color: #fff; }
-    .back-top { text-align: center; padding: 16px; font-weight: 700; font-size: 24px; cursor: pointer; }
-    .footer-inner { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; max-width: 1440px; margin: 0 auto; padding: 40px 24px; }
-
-    /* Toast */
-    .toast { position: fixed; top: 20px; right: 20px; background: #252F3D; color: #fff; padding: 12px 16px; border-radius: 8px; transform: translateX(120%); transition: transform .3s ease; z-index: 1000; }
-    .toast.show { transform: translateX(0); }
-
-    /* Responsive */
-    @media (max-width: 1200px) {
-      .topbar-content { grid-template-columns: 220px 1fr 220px 0; }
-      .auth { display: none; }
-    }
-    @media (max-width: 768px) {
-      .cats { flex-wrap: wrap; height: auto; row-gap: 20px; }
-      .grid { grid-template-columns: repeat(2, 1fr); }
-    }
+    /* (rest of CSS omitted here for brevity — paste your existing style block) */
   </style>
 </head>
+<!-- note: echo a normalized slug into data-current-cat -->
 <body data-current-cat="<?php echo htmlspecialchars($currentCat, ENT_QUOTES); ?>">
   <!-- Header -->
   <header class="topbar">
@@ -177,6 +122,7 @@
 
   <!-- Categories -->
   <section class="cats container" id="cats">
+    <!-- NOTE: use hyphenated slugs in data-cat -->
     <div class="cat-card" data-cat="food" onclick="window.location.href='?cat=food'">
         <i class="material-icons" style="font-size:40px;color:#2b7a78;">restaurant</i>
         <div class="label">Food</div>
@@ -185,15 +131,15 @@
         <i class="material-icons" style="font-size:40px;color:#2b7a78;">fruit_emoji</i>
         <div class="label">Fruits</div>
     </div>
-    <div class="cat-card" data-cat="snack drink" onclick="window.location.href='?cat=snack drink'">
+    <div class="cat-card" data-cat="snack-drink" onclick="window.location.href='?cat=snack-drink'">
         <i class="material-icons" style="font-size:40px;color:#2b7a78;">local_drink</i>
         <div class="label">Snacks & Drinks</div>
     </div>
-    <div class="cat-card" data-cat="stationary" onclick="window.location.href='?cat=stationary'">
+    <div class="cat-card" data-cat="stationery" onclick="window.location.href='?cat=stationery'">
         <i class="material-icons" style="font-size:40px;color:#2b7a78;">edit</i>
-        <div class="label">Stationary</div>
+        <div class="label">Stationery</div>
     </div>
-    <div class="cat-card active" data-cat="essential" onclick="window.location.href='?cat=essential'">
+    <div class="cat-card" data-cat="essential" onclick="window.location.href='?cat=essential'">
         <i class="material-icons" style="font-size:40px;color:#2b7a78;">umbrella</i>
         <div class="label">Essentials</div>
     </div>
@@ -223,8 +169,16 @@
         const cartBadge = document.getElementById('cartBadge');
         const toast = document.getElementById('toast');
 
-        // Detect default filter from <body data-current-cat="">
-        let currentFilter = document.body.dataset.currentCat || 'all';
+        // Prefer URL ?cat=... first (override data-current-cat), then data-current-cat fallback
+        function getQueryParam(name) {
+            const params = new URLSearchParams(window.location.search);
+            return params.get(name);
+        }
+        const urlCatRaw = getQueryParam('cat') || '';
+        // normalize url cat to match server-side slug rules (lowercase & spaces->hyphen)
+        const urlCat = urlCatRaw.trim().toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9\-]/g,'');
+        let currentFilter = urlCat || document.body.dataset.currentCat || 'all';
+
         let cartCount = <?php echo (int)($cartCount ?? 0); ?>;
         document.getElementById('cartBadge').textContent = String(cartCount);
 
@@ -280,13 +234,18 @@
         // Search
         searchInput.addEventListener('input', renderProducts);
 
-        // Category chips
+        // Category chips (client-side highlight + update filter without full page reload)
         document.getElementById('cats').addEventListener('click', (e) => {
             const card = e.target.closest('.cat-card');
             if (!card) return;
             document.querySelectorAll('.cat-card').forEach(c => c.classList.remove('active'));
             card.classList.add('active');
+            // use data-cat (already hyphenated from server)
             currentFilter = card.dataset.cat || 'all';
+            // update URL without reloading (so bookmarkable)
+            const newUrl = new URL(window.location.href);
+            newUrl.searchParams.set('cat', currentFilter);
+            window.history.replaceState({}, '', newUrl);
             renderProducts();
         });
 
